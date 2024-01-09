@@ -158,7 +158,7 @@ class _homepageState extends State<homepage> {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (_, index) {
                           print(index);
-                          var categories = ['Para1','Para2','Para2'];
+                          var categories = ['Para1','Para2','Para2','Para1','Para2','Para2','Para1','Para2','Para2'];
                           return GestureDetector(
                               child: Padding(
                                   padding: const EdgeInsets.only(right: 16.0),
