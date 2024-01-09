@@ -1,0 +1,44 @@
+name: e_commmerce1
+description: A new Flutter project.
+
+
+publish_to: 'none' 
+
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.4 <3.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  carousel_pro: ^1.0.0
+
+  cupertino_icons: ^0.1.2
+  iconsax: ^0.0.8
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^2.0.0
+
+
+flutter:
+
+  uses-material-design: true
+  assets:
+    - images/products/p_1.jpg
+    - images/products/p_2.jpg
+    - images/products/p_3.jpg
+    - images/category/circle_kurti.png
+    - images/products/product1.jpeg
+    - images/category/heart.png
+    - images/category/short_kurti.png
+
