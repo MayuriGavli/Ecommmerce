@@ -157,8 +157,16 @@ class _homepageState extends State<homepage> {
                         itemCount: 9,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (_, index) {
-                          print(index);
-                          var categories = ['Para1','Para2','Para2','Para1','Para2','Para2','Para1','Para2','Para2'];
+                          var categories = ['Anarkali','   Denim',' Dungree','    Gowns','    Kurti','    Sari','  Shorts','     Skirts','Sundress'];
+                          var images = ['images/category/anarkali_crop.png',
+                                        'images/category/denim-modified.png',
+                                        'images/category/dungree-modified.png',
+                                        'images/category/gown1-modified.png',
+                                        'images/category/kurti-modified.png',
+                                        'images/category/sari1-modified.png',
+                                        'images/category/shorts.png',
+                                        'images/category/skirts-modified.png',
+                                        'images/category/sundress1-modified.png'];
                           return GestureDetector(
                               child: Padding(
                                   padding: const EdgeInsets.only(right: 16.0),
@@ -166,18 +174,13 @@ class _homepageState extends State<homepage> {
                                     Container(
                                       width: 56,
                                       height: 56,
-                                      padding: const EdgeInsets.all(8.0),
                                       decoration: BoxDecoration(
                                           color: Colors.black12,
-                                          // border: Border.all(),
                                           borderRadius:
                                               BorderRadius.circular(100)),
-                                      child: const Center(
-                                        child: Image(
-                                            image: AssetImage(
-                                                'images/category/circle_kurti.png'),
-                                            fit: BoxFit.fill),
-                                      ),
+                                      child: Image(
+                                          image: AssetImage(images[index]),
+                                          fit: BoxFit.fill),
                                     ),
                                     const SizedBox(height: 16.0 / 2),
                                     SizedBox(
@@ -192,7 +195,7 @@ class _homepageState extends State<homepage> {
                                   ])));
                         },
                       )),
-                  Padding(padding: EdgeInsets.only(top: 20)),
+                  const Padding(padding: EdgeInsets.only(top: 20)),
                   const Text("Best Selling Product",
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 16.0),
@@ -223,7 +226,7 @@ class TProductCardVertical extends StatelessWidget {
           Troundedcontainer(
             height: 175,
             width: 300,
-            padding: EdgeInsets.only(top: 3.0),
+            padding: EdgeInsets.only(top: 10.0),
             backgroundColor: Colors.transparent,
 
             // thumbnail image
@@ -263,7 +266,7 @@ class TProductCardVertical extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 1),
+          const SizedBox(height: 4),
           Padding(
             padding: EdgeInsets.only(left: 16),
             child: Column(
