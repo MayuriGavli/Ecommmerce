@@ -19,6 +19,7 @@ dependencies:
 
   cupertino_icons: ^0.1.2
   iconsax: ^0.0.8
+  sqflite: ^2.0.0
 
 
 
@@ -37,7 +38,8 @@ flutter:
     - images/products/p_1.jpg
     - images/products/p_2.jpg
     - images/products/p_3.jpg
-    - images/products/product1.jpeg
+
+
     - images/category/anarkali_crop.png
     - images/category/denim-modified.png
     - images/category/dungree-modified.png
@@ -47,6 +49,7 @@ flutter:
     - images/category/shorts.png
     - images/category/skirts-modified.png
     - images/category/sundress1-modified.png
-    - images/category/product_1.png
+    - images/products/product_1.png
+    - images/products/product1.jpeg
 
 
