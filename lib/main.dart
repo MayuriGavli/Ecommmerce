@@ -23,21 +23,21 @@ class MyOtherClass {
 
 void main() {
   runApp(const MaterialApp(
-    home: homepage(),
+    home: HomePage(),
   ));
 }
 
-class homepage extends StatefulWidget {
-  const homepage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<homepage> createState() => _homepageState();
+  State<HomePage> createState() => HomepageState();
 }
 
-class _homepageState extends State<homepage> {
+class HomepageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    Widget image_carousel = Container(
+    Widget imageCarousel = Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(24.0)),
       height: 200.0,
       margin: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 8),
@@ -62,7 +62,7 @@ class _homepageState extends State<homepage> {
         elevation: 0.1,
         title: const Text("SHOPPING APP"),
         actions: <Widget>[
-          Padding(
+          const Padding(
               padding: EdgeInsets.only(right: 8, left: 8, top: 8, bottom: 8)),
           IconButton(
               onPressed: () {},
@@ -82,7 +82,7 @@ class _homepageState extends State<homepage> {
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-                accountName: const Text("Mayuri Gavli"),
+                accountName: const Text("Mauri Gali"),
                 accountEmail: const Text("mayuri@gmail.com"),
                 currentAccountPicture: GestureDetector(
                   child: const CircleAvatar(
@@ -141,7 +141,7 @@ class _homepageState extends State<homepage> {
       ),
       body: ListView(
         children: <Widget>[
-          image_carousel,
+          imageCarousel,
           Padding(
               padding: EdgeInsets.all(8.0),
               child: Column(
@@ -199,7 +199,19 @@ class _homepageState extends State<homepage> {
                   const Text("Best Selling Product",
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 16.0),
-                  TProductCardVertical(),
+                  GridView.builder(
+                    itemCount: 2,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(left: 5,right: 5),
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 10.0,
+                      mainAxisExtent: 253,
+                    ),
+                    itemBuilder: (_, index) =>  TProductCardVertical(index),
+                  )
                 ],
               )),
         ],
@@ -208,14 +220,38 @@ class _homepageState extends State<homepage> {
   }
 }
 
-class TProductCardVertical extends StatelessWidget {
-  const TProductCardVertical({super.key});
 
+class TProductCardVertical extends StatelessWidget {
+  const TProductCardVertical( this.index, {super.key});
+  final int index;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 145,
-      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+    var items = [
+      {
+        'name': 'T-Shirt',
+        'company_name': 'Amazon',
+        'is_company_verified': true,
+        'price': "\$1500.00",
+        'image': 'images/category/product_1.png',
+        'discount': '30%',
+        'isFavorite': true,
+      },
+      {
+        'name': 'Sadi',
+        'company_name': 'Flipcart',
+        'is_company_verified': false,
+        'price': "\$2500.00",
+        'image': 'images/category/product_1.png',
+        'discount': '10%',
+        'isFavorite': false,
+      },
+    ];
+    return  GestureDetector(
+      onTap: (){},
+      child: Container(
+      // width: 50,
+      // height: 50,
+      // padding: const EdgeInsets.only(left: 5, right: 1),
       decoration: BoxDecoration(
         color: Colors.black12,
         borderRadius: BorderRadius.circular(12),
@@ -225,27 +261,28 @@ class TProductCardVertical extends StatelessWidget {
         children: [
           Troundedcontainer(
             height: 175,
-            width: 300,
-            padding: EdgeInsets.only(top: 10.0),
+            width: 900,
+            // padding: const EdgeInsets.only(left: 20,top: 7),
             backgroundColor: Colors.transparent,
-
             // thumbnail image
             child: Stack(
               children: [
-                const Troundedimage(
-                    imageUrl: "images/products/product1.jpeg",
-                    applyImageRadius: true),
+                 Troundedimage(
+                    imageUrl: items[index]['image'].toString(),
+                    applyImageRadius: true,
+                padding: EdgeInsets.only(top: 10,left: 20),
+              ),
 
                 //sale tag
-                const Positioned(
+                Positioned(
                   top: 5,
-                  left: 4,
+                  left:5,
                   child: Troundedcontainer(
                     radius: 12.0,
                     backgroundColor: Colors.amber,
                     // padding: EdgeInsets.symmetric(horizontal: 8.0,vertical: 8.0),
                     padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                    child: Text("25%"),
+                    child: Text(items[index]['discount'].toString()),
                   ),
                 ),
 
@@ -259,36 +296,38 @@ class TProductCardVertical extends StatelessWidget {
                           // color: dark?
                         ),
                         child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(Iconsax.heart5),
-                          color: Colors.redAccent,
-                        ))),
+                          onPressed: (){},
+                          icon: items[index]['isFavorite']==true ? const Icon(Iconsax.heart5) : const Icon(Iconsax.heart5),
+                          color: items[index]['isFavorite']==true ?  Colors.redAccent: Colors.white,
+                        )
+                    )
+                ),
               ],
             ),
           ),
           const SizedBox(height: 4),
           Padding(
-            padding: EdgeInsets.only(left: 16),
+            padding: EdgeInsets.only(left: 25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Grey T-shirt',
+                 Text(
+                  items[index]['name'].toString(),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   textAlign: TextAlign.start,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'RobotoMono',
                       fontStyle: FontStyle.normal,
                       fontWeight: FontWeight.w500,
                       fontSize: 14,
                       color: Colors.black),
                 ),
-                SizedBox(height: 2),
+                const SizedBox(height: 4),
                 Row(
                   children: const [
                     Text(
-                      "Amazon",
+                      'Amazon',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           fontFamily: 'RobotoMono',
@@ -297,7 +336,7 @@ class TProductCardVertical extends StatelessWidget {
                           fontSize: 12,
                           color: Colors.black),
                     ),
-                    SizedBox(width: 6),
+                    SizedBox(width: 4),
                     Icon(
                       Iconsax.verify5,
                       color: Colors.blue,
@@ -305,7 +344,7 @@ class TProductCardVertical extends StatelessWidget {
                     )
                   ],
                 ),
-                SizedBox(height: 1),
+                // SizedBox(height: 1),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -344,8 +383,10 @@ class TProductCardVertical extends StatelessWidget {
           )
         ],
       ),
-    );
+    ),
+     ) ;
   }
+
 }
 
 class Troundedcontainer extends StatelessWidget {
@@ -396,7 +437,7 @@ class Troundedimage extends StatelessWidget {
       this.height,
       required this.imageUrl,
       this.applyImageRadius = true,
-      this.backgroundColor = Colors.lightBlue,
+      this.backgroundColor = Colors.transparent,
       this.fit = BoxFit.contain,
       this.padding,
       this.isNetworkImage = false,
