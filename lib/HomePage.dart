@@ -57,7 +57,7 @@ class HomepageState extends State<HomePage> {
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-                accountName: const Text("Mauri Gali"),
+                accountName: const Text("Mayuri Gavli"),
                 accountEmail: const Text("mayuri@gmail.com"),
                 currentAccountPicture: GestureDetector(
                   child: const CircleAvatar(
@@ -175,17 +175,18 @@ class HomepageState extends State<HomePage> {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 16.0),
                   GridView.builder(
-                    itemCount: 2,
+                    itemCount: 6,
                     shrinkWrap: true,
-                    padding: const EdgeInsets.only(left: 5,right: 5),
+                    padding: const EdgeInsets.only(left: 5, right: 5),
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 10.0,
                       crossAxisSpacing: 10.0,
                       mainAxisExtent: 253,
                     ),
-                    itemBuilder: (_, index) =>  TProductCardVertical(index),
+                    itemBuilder: (_, index) => TProductCardVertical(index),
                   )
                 ],
               )),
@@ -205,19 +206,55 @@ class TProductCardVertical extends StatelessWidget {
         'name': 'T-Shirt',
         'company_name': 'Amazon',
         'is_company_verified': true,
-        'price': "\$1500.00",
-        'image': 'images/category/product_1.png',
+        'price': "\$300.00",
+        'image': 'images/products/top.png',
         'discount': '30%',
         'isFavorite': true,
       },
       {
-        'name': 'Sadi',
+        'name': 'White Lehnaga',
         'company_name': 'Flipcart',
         'is_company_verified': false,
-        'price': "\$2500.00",
-        'image': 'images/category/product_1.png',
+        'price': "\$500.00",
+        'image': 'images/products/LEHNAGA.png',
         'discount': '10%',
-        'isFavorite': false,
+        'isFavorite': true,
+      },
+      {
+        'name': 'White Shirt',
+        'company_name': 'Meesho',
+        'is_company_verified': false,
+        'price': "\$500.00",
+        'image': 'images/products/skirt.png',
+        'discount': '50%',
+        'isFavorite': true,
+      },
+      {
+        'name': 'Sadi',
+        'company_name': 'Amazon',
+        'is_company_verified': false,
+        'price': "\$500.00",
+        'image': 'images/products/sadi.png',
+        'discount': '30%',
+        'isFavorite': true,
+      },
+      {
+        'name': 'JumpSuit',
+        'company_name': 'Meesho',
+        'is_company_verified': false,
+        'price': "\$500.00",
+        'image': 'images/products/jumsuit.png',
+        'discount': '10%',
+        'isFavorite': true,
+      },
+      {
+        'name': 'Anarkali',
+        'company_name': 'Flipcart',
+        'is_company_verified': false,
+        'price': "\$500.00",
+        'image': 'images/products/anarkali.png',
+        'discount': '20%',
+        'isFavorite': true,
       },
     ];
     return  GestureDetector(
@@ -270,25 +307,27 @@ class TProductCardVertical extends StatelessWidget {
                             // color: dark?
                           ),
                           child: IconButton(
-                            onPressed: (){},
-                            icon: items[index]['isFavorite']==true ? const Icon(Iconsax.heart5) : const Icon(Iconsax.heart5),
-                            color: items[index]['isFavorite']==true ?  Colors.redAccent: Colors.white,
-                          )
-                      )
-                  ),
+                            onPressed: () {},
+                            icon: items[index]['isFavorite'] == true
+                                ? const Icon(Iconsax.heart5)
+                                : const Icon(Iconsax.heart5),
+                            color: items[index]['isFavorite'] == true
+                                ? Colors.redAccent
+                                : Colors.white,
+                          ))),
                 ],
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 5),
             Padding(
-              padding: EdgeInsets.only(left: 25),
+              padding: EdgeInsets.only(left: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     items[index]['name'].toString(),
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                    maxLines: 2,
                     textAlign: TextAlign.start,
                     style: const TextStyle(
                         fontFamily: 'RobotoMono',
@@ -299,11 +338,11 @@ class TProductCardVertical extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Row(
-                    children: const [
+                    children: [
                       Text(
-                        'Amazon',
+                        items[index]['company_name'].toString(),
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'RobotoMono',
                             fontStyle: FontStyle.normal,
                             fontWeight: FontWeight.w500,
@@ -311,7 +350,7 @@ class TProductCardVertical extends StatelessWidget {
                             color: Colors.black),
                       ),
                       SizedBox(width: 4),
-                      Icon(
+                      const Icon(
                         Iconsax.verify5,
                         color: Colors.blue,
                         size: 16,
@@ -322,14 +361,14 @@ class TProductCardVertical extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "\$200.0",
+                      Text(
+                        items[index]['price'].toString(),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'RobotoMono',
                             fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.bold,
                             fontSize: 14,
                             color: Colors.black),
                       ),

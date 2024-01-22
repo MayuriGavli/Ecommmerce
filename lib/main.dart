@@ -5,11 +5,11 @@
 
 import 'package:flutter/material.dart';
 
-import 'homePage.dart';
+import 'SignScreen.dart';
 
 void main() {
   runApp(const MaterialApp(
     // home: LoginPage(),
-    home: HomePage(),
+    home: SignScreen(),
   ));
 }
