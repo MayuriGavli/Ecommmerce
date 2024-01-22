@@ -1,125 +1,189 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
-class SignScreen extends StatefulWidget {
-  const SignScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  _SignScreenState createState() => _SignScreenState();
+  _SignupScreenState createState() => _SignupScreenState();
 }
 
-class _SignScreenState extends State<SignScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final _namecontroller = TextEditingController();
-  final _emailcontroller = TextEditingController();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _passwordVisible = false;
+  bool _agreedToTerms = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-            padding: const EdgeInsets.only(
-                top: 56.0, left: 20.0, bottom: 24.0, right: 24.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      SizedBox(height: 30),
-                      Text("Let's Create New Account",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 30))
-                    ],
-                  ),
-                  const SizedBox(height: 20.0),
-                  Form(
-                      child: Column(
-                    children: [
-                      //username
-                      TextFormField(
-                        controller: _namecontroller,
-                        decoration: const InputDecoration(
-                            prefixIcon: Icon(Iconsax.personalcard),
-                            border: OutlineInputBorder(),
-                            labelText: "Username"),
-                        validator: (name) {
-                          print('Error');
-                          if (name!.isEmpty) {
-                            return 'Enter Valid Username';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 16.0),
-
-                      //E-mail
-                      TextFormField(
-                        // controller: _namecontroller,
-                        decoration: const InputDecoration(
-                            prefixIcon: Icon(Iconsax.direct),
-                            border: OutlineInputBorder(),
-                            labelText: "Phone Number"),
-                        keyboardType: TextInputType.phone,
-                      ),
-                      const SizedBox(height: 16.0),
-
-                      //Phone Number
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            prefixIcon: Icon(Iconsax.call),
-                            border: OutlineInputBorder(),
-                            labelText: "E-mail"),
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      const SizedBox(height: 16.0),
-
-                      //Password
-                      TextFormField(
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Iconsax.password_check),
-                          labelText: "Password",
+          padding: const EdgeInsets.only(
+              top: 56.0, left: 20.0, bottom: 24.0, right: 24.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    SizedBox(height: 30),
+                    Text("Let's Create New Account",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 30)),
+                  ],
+                ),
+                const SizedBox(height: 20.0),
+                Column(
+                  children: [
+                    //username
+                    TextFormField(
+                      controller: _nameController,
+                      decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.person),
                           border: OutlineInputBorder(),
-                          suffixIcon: Icon(Iconsax.eye_slash),
+                          labelText: "Username"),
+                      validator: (name) {
+                        if (name!.isEmpty) {
+                          return 'Enter Valid Username';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+
+                    //E-mail
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.email),
+                          border: OutlineInputBorder(),
+                          labelText: "E-mail"),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (email) {
+                        if (email!.isEmpty) {
+                          return 'Enter Valid Email';
+                        } else if (!RegExp(
+                                r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
+                            .hasMatch(email)) {
+                          return 'Enter a valid Email Address';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+
+                    //Phone Number
+                    TextFormField(
+                      controller: _phoneController,
+                      decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.phone),
+                          border: OutlineInputBorder(),
+                          labelText: "Phone Number"),
+                      keyboardType: TextInputType.phone,
+                      validator: (phone) {
+                        if (phone!.isEmpty) {
+                          return 'Enter Valid Phone Number';
+                        } else if (!RegExp(r'^[0-9]{10}$').hasMatch(phone)) {
+                          return 'Enter a valid 10-digit Phone Number';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+
+                    //Password
+                    TextFormField(
+                      controller: _passwordController,
+                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: !_passwordVisible,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.lock),
+                        labelText: "Password",
+                        border: OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          },
                         ),
                       ),
-                      const SizedBox(height: 16.0),
-                      //remember
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Checkbox(value: true, onChanged: (value) {}),
-                              const Text(
-                                  "I agree to Privacy Policy and Terms of use")
-                            ],
-                          ),
+                      validator: (password) {
+                        if (password!.isEmpty) {
+                          return 'Enter Valid Password';
+                        } else if (password.length < 3) {
+                          return 'Password must be at least 6 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
 
-                          //I agree
-                          // TextButton(onPressed: (){}, child: Text("I agree to Priacy Policy and Terms of use")),
-                        ],
+                    //I agree to Privacy Policy and Terms of use
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: _agreedToTerms,
+                          onChanged: (value) {
+                            setState(() {
+                              _agreedToTerms = value!;
+                            });
+                          },
+                        ),
+                        const Text("I agree to Privacy Policy and Terms of use")
+                      ],
+                    ),
+
+                    const SizedBox(height: 16.0),
+
+                    //create new account
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Check if the form is valid and terms are agreed
+                          if (_formKey.currentState!.validate() &&
+                              _agreedToTerms) {
+                            // Form is valid and terms are agreed, perform the desired action
+                            _submitForm();
+                          }
+                        },
+                        child: const Text("Create New Account"),
                       ),
-
-                      const SizedBox(height: 16.0),
-
-                      //create new account
-                      SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                _formKey.currentState!.validate();
-                              },
-                              child: const Text("Create New Account"))),
-                      const SizedBox(height: 16.0),
-                    ],
-                  ))
-                ],
-              ),
-            )),
+                    ),
+                    const SizedBox(height: 16.0),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
+  }
+
+  void _submitForm() {
+    // Perform the form submission logic here
+    String name = _nameController.text;
+    String email = _emailController.text;
+    String phone = _phoneController.text;
+    String password = _passwordController.text;
+
+    // For demonstration purposes, just print the form data
+    print('Name: $name');
+    print('Email: $email');
+    print('Phone: $phone');
+    print('Password: $password');
+
+    // Add your logic to handle the form submission
   }
 }
