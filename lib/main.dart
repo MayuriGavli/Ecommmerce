@@ -1,14 +1,11 @@
 //
 // import 'dart:html';
 
-// import 'dart:ui';
-
+import 'package:e_commmerce1/HomePage.dart';
 import 'package:flutter/material.dart';
-
-import 'LoginScreen.dart';
 
 void main() {
   runApp(const MaterialApp(
-    home: LoginScreen(),
+    home: HomePage(),
   ));
 }

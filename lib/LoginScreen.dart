@@ -1,5 +1,5 @@
+import 'package:e_commmerce1/HomePage.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
 import 'SignScreen.dart';
 
@@ -12,6 +12,7 @@ class LoginScreen extends StatefulWidget {
 
 class LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _passwordVisible = false;
   bool _rememberMe = false;
@@ -58,13 +59,19 @@ class LoginScreenState extends State<LoginScreen> {
       child: Column(
         children: [
           TextFormField(
+            controller: _emailController,
             decoration: const InputDecoration(
-              prefixIcon: Icon(Iconsax.direct_right),
-              labelText: "Email",
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your email';
+                prefixIcon: Icon(Icons.email),
+                border: OutlineInputBorder(),
+                labelText: "E-mail"),
+            keyboardType: TextInputType.emailAddress,
+            validator: (email) {
+              if (email!.isEmpty) {
+                return 'Enter Valid Email';
+              } else if (!RegExp(
+                      r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
+                  .hasMatch(email)) {
+                return 'Enter a valid Email Address';
               }
               return null;
             },
@@ -92,8 +99,8 @@ class LoginScreenState extends State<LoginScreen> {
             validator: (password) {
               if (password == null || password.isEmpty) {
                 return 'Please enter your password';
-              } else if (password.length < 6) {
-                return 'Password must be at least 6 characters';
+              } else if (password.length < 3) {
+                return 'Password must be at least 3 characters';
               }
               return null;
             },
@@ -112,7 +119,7 @@ class LoginScreenState extends State<LoginScreen> {
                       });
                     },
                   ),
-                  const Text("I agree to Privacy Policy"),
+                  const Text("Remember Me"),
                 ],
               ),
               TextButton(
@@ -131,8 +138,10 @@ class LoginScreenState extends State<LoginScreen> {
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  // Form is valid, perform login logic here
-                  // You can use _passwordController.text and emailController.text to get the values
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
                 }
               },
               child: Text("Sign In"),

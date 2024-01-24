@@ -1,4 +1,5 @@
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:e_commmerce1/Favourites.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -87,7 +88,12 @@ class HomepageState extends State<HomePage> {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Favourites()),
+                );
+              },
               child: const ListTile(
                 title: Text("Favourites"),
                 leading: Icon(Icons.favorite, color: Colors.red),
@@ -307,10 +313,14 @@ class TProductCardVertical extends StatelessWidget {
                             // color: dark?
                           ),
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              print(items[index]['isFavorite']);
+                              items[index]['isFavorite'] = false;
+                              print(items[index]['isFavorite']);
+                            },
                             icon: items[index]['isFavorite'] == true
                                 ? const Icon(Iconsax.heart5)
-                                : const Icon(Iconsax.heart5),
+                                : const Icon(Iconsax.heart),
                             color: items[index]['isFavorite'] == true
                                 ? Colors.redAccent
                                 : Colors.white,
@@ -374,7 +384,7 @@ class TProductCardVertical extends StatelessWidget {
                       ),
                       Container(
                         decoration: const BoxDecoration(
-                            color: Colors.brown,
+                            color: Colors.blue,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10.0),
                               bottomRight: Radius.circular(10.0),

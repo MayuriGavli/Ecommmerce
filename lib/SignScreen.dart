@@ -1,3 +1,5 @@
+import 'package:e_commmerce1/HomePage.dart';
+import 'package:e_commmerce1/LoginScreen.dart';
 import 'package:flutter/material.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -67,7 +69,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         if (email!.isEmpty) {
                           return 'Enter Valid Email';
                         } else if (!RegExp(
-                                r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
+                            r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
                             .hasMatch(email)) {
                           return 'Enter a valid Email Address';
                         }
@@ -153,7 +155,11 @@ class _SignupScreenState extends State<SignupScreen> {
                           // Check if the form is valid and terms are agreed
                           if (_formKey.currentState!.validate() &&
                               _agreedToTerms) {
-                            // Form is valid and terms are agreed, perform the desired action
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()),
+                            );
                             _submitForm();
                           }
                         },
@@ -161,6 +167,20 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                     const SizedBox(height: 16.0),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          // Navigate to the SignupScreen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()),
+                          );
+                        },
+                        child: Text("Already Create Account"),
+                      ),
+                    ),
                   ],
                 ),
               ],

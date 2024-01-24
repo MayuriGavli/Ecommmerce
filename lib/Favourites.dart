@@ -1,0 +1,290 @@
+import 'package:e_commmerce1/HomePage.dart';
+import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
+
+class Favourites extends StatefulWidget {
+  const Favourites({super.key});
+
+  @override
+  State<Favourites> createState() => FavouritesState();
+}
+
+class FavouritesState extends State<Favourites> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.1,
+        title: const Text("FAVOURITE"),
+        centerTitle: true,
+        actions: <Widget>[
+          const Padding(
+              padding: EdgeInsets.only(right: 8, left: 8, top: 8, bottom: 8)),
+        ],
+        leading: IconButton(
+          onPressed: () {},
+          icon: IconButton(
+            icon: Icon(Iconsax.arrow_left),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            },
+          ),
+        ),
+      ),
+      body: ListView(
+        children: <Widget>[
+          Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16.0),
+                  GridView.builder(
+                    itemCount: 8,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(left: 5, right: 5),
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 10.0,
+                      mainAxisExtent: 253,
+                    ),
+                    itemBuilder: (_, index) => TProductCardVertical(index),
+                  )
+                ],
+              )),
+        ],
+      ),
+    );
+  }
+}
+
+class TProductCardVertical extends StatelessWidget {
+  const TProductCardVertical(this.index, {super.key});
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    var items = [
+      {
+        'name': 'T-Shirt',
+        'company_name': 'Amazon',
+        'is_company_verified': true,
+        'price': "\$300.00",
+        'image': 'images/products/top.png',
+        'discount': '30%',
+        'isFavorite': true,
+      },
+      {
+        'name': 'White Lehnaga',
+        'company_name': 'Flipcart',
+        'is_company_verified': false,
+        'price': "\$500.00",
+        'image': 'images/products/LEHNAGA.png',
+        'discount': '10%',
+        'isFavorite': true,
+      },
+      {
+        'name': 'White Shirt',
+        'company_name': 'Meesho',
+        'is_company_verified': false,
+        'price': "\$500.00",
+        'image': 'images/products/skirt.png',
+        'discount': '50%',
+        'isFavorite': true,
+      },
+      {
+        'name': 'Sadi',
+        'company_name': 'Amazon',
+        'is_company_verified': false,
+        'price': "\$500.00",
+        'image': 'images/products/sadi.png',
+        'discount': '30%',
+        'isFavorite': true,
+      },
+      {
+        'name': 'JumpSuit',
+        'company_name': 'Meesho',
+        'is_company_verified': false,
+        'price': "\$500.00",
+        'image': 'images/products/jumsuit.png',
+        'discount': '10%',
+        'isFavorite': true,
+      },
+      {
+        'name': 'Anarkali',
+        'company_name': 'Flipcart',
+        'is_company_verified': false,
+        'price': "\$500.00",
+        'image': 'images/products/anarkali.png',
+        'discount': '20%',
+        'isFavorite': true,
+      },
+      {
+        'name': 'Gowns',
+        'company_name': 'Amazon',
+        'is_company_verified': true,
+        'price': "\$800.00",
+        'image': 'images/products/top.png',
+        'discount': '50%',
+        'isFavorite': true,
+      },
+      {
+        'name': 'Sundress',
+        'company_name': 'Amazon',
+        'is_company_verified': true,
+        'price': "\$500.00",
+        'image': 'images/products/top.png',
+        'discount': '70%',
+        'isFavorite': true,
+      },
+    ];
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        // width: 50,
+        // height: 50,
+        // padding: const EdgeInsets.only(left: 5, right: 1),
+        decoration: BoxDecoration(
+          color: Colors.black12,
+          borderRadius: BorderRadius.circular(12),
+          // boxShadow: [BoxShadow(color: Colors.tealAccent, blurRadius: 50, spreadRadius: 7, offset: Offset(0,2))],
+        ),
+        child: Column(
+          children: [
+            Troundedcontainer(
+              height: 175,
+              width: 900,
+              // padding: const EdgeInsets.only(left: 20,top: 7),
+              backgroundColor: Colors.transparent,
+              // thumbnail image
+              child: Stack(
+                children: [
+                  Troundedimage(
+                    imageUrl: items[index]['image'].toString(),
+                    applyImageRadius: true,
+                    padding: EdgeInsets.only(top: 10, left: 20),
+                  ),
+
+                  //sale tag
+                  Positioned(
+                    top: 5,
+                    left: 5,
+                    child: Troundedcontainer(
+                      radius: 12.0,
+                      backgroundColor: Colors.amber,
+                      // padding: EdgeInsets.symmetric(horizontal: 8.0,vertical: 8.0),
+                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                      child: Text(items[index]['discount'].toString()),
+                    ),
+                  ),
+
+                  //favorite icon
+                  Positioned(
+                      top: -8,
+                      right: -7,
+                      child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            // color: dark?
+                          ),
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: items[index]['isFavorite'] == true
+                                ? const Icon(Iconsax.heart5)
+                                : const Icon(Iconsax.heart5),
+                            color: items[index]['isFavorite'] == true
+                                ? Colors.redAccent
+                                : Colors.white,
+                          ))),
+                ],
+              ),
+            ),
+            const SizedBox(height: 5),
+            Padding(
+              padding: EdgeInsets.only(left: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    items[index]['name'].toString(),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                        fontFamily: 'RobotoMono',
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color: Colors.black),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text(
+                        items[index]['company_name'].toString(),
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontFamily: 'RobotoMono',
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color: Colors.black),
+                      ),
+                      SizedBox(width: 4),
+                      const Icon(
+                        Iconsax.verify5,
+                        color: Colors.blue,
+                        size: 16,
+                      )
+                    ],
+                  ),
+                  // SizedBox(height: 1),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        items[index]['price'].toString(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontFamily: 'RobotoMono',
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.black),
+                      ),
+                      Container(
+                        decoration: const BoxDecoration(
+                            color: Colors.brown,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.0),
+                              bottomRight: Radius.circular(10.0),
+                            )),
+                        child: const SizedBox(
+                          width: 30 * 1.2,
+                          height: 30 * 1.2,
+                          child: Center(
+                              child: Icon(
+                            Iconsax.add,
+                            color: Colors.white,
+                          )),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
