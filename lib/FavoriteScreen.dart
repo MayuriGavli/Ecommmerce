@@ -2,37 +2,26 @@ import 'package:e_commmerce1/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-class Favourites extends StatefulWidget {
-  const Favourites({super.key});
+class FavoriteScreen extends StatefulWidget {
+  const FavoriteScreen({super.key});
 
   @override
-  State<Favourites> createState() => FavouritesState();
+  State<FavoriteScreen> createState() => FavoriteScreenState();
 }
 
-class FavouritesState extends State<Favourites> {
+class FavoriteScreenState extends State<FavoriteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.1,
         title: const Text("FAVOURITE"),
-        centerTitle: true,
-        actions: <Widget>[
-          const Padding(
+        // centerTitle: true,
+
+        actions: const <Widget>[
+          Padding(
               padding: EdgeInsets.only(right: 8, left: 8, top: 8, bottom: 8)),
         ],
-        leading: IconButton(
-          onPressed: () {},
-          icon: IconButton(
-            icon: Icon(Iconsax.arrow_left),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
-            },
-          ),
-        ),
       ),
       body: ListView(
         children: <Widget>[
@@ -131,7 +120,7 @@ class TProductCardVertical extends StatelessWidget {
         'company_name': 'Amazon',
         'is_company_verified': true,
         'price': "\$800.00",
-        'image': 'images/products/top.png',
+        'image': 'images/products/sadi.png',
         'discount': '50%',
         'isFavorite': true,
       },

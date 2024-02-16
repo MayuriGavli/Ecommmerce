@@ -1,5 +1,6 @@
-import 'package:carousel_pro/carousel_pro.dart';
-import 'package:e_commmerce1/Favourites.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:e_commmerce1/DetailProductScreen.dart';
+import 'package:e_commmerce1/SearchScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -14,22 +15,40 @@ class HomepageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Widget imageCarousel = Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(24.0)),
-      height: 200.0,
-      margin: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 8),
-      child: Carousel(
-        boxFit: BoxFit.cover,
-        images: const [
-          AssetImage('images/products/p_1.jpg'),
-          AssetImage('images/products/p_2.jpg'),
-          AssetImage('images/products/p_3.jpg'),
-          AssetImage('images/products/p_1.jpg'),
+      child: Column(
+        children: [
+          CarouselSlider(
+            options: CarouselOptions(
+              height: 200,
+              aspectRatio: 16 / 9,
+              viewportFraction: 0.8,
+              initialPage: 0,
+              enableInfiniteScroll: true,
+              reverse: false,
+              autoPlay: true,
+              autoPlayInterval: Duration(seconds: 3),
+              autoPlayAnimationDuration: Duration(milliseconds: 800),
+              autoPlayCurve: Curves.fastOutSlowIn,
+              enlargeCenterPage: true,
+              enlargeFactor: 0.3,
+              scrollDirection: Axis.horizontal,
+            ),
+            items: const [
+              Troundedimage(
+                imageUrl: 'images/products/sale.png',
+                width: 350,
+              ),
+              Troundedimage(
+                imageUrl: 'images/products/sale2.png',
+                width: 350,
+              ),
+              Troundedimage(
+                imageUrl: 'images/products/sale3.png',
+                width: 350,
+              ),
+            ],
+          ),
         ],
-        autoplay: true,
-        animationCurve: Curves.fastOutSlowIn,
-        animationDuration: const Duration(milliseconds: 1000),
-        indicatorBgPadding: 4.0,
-        dotSize: 4.0,
       ),
     );
 
@@ -41,7 +60,14 @@ class HomepageState extends State<HomePage> {
           const Padding(
               padding: EdgeInsets.only(right: 8, left: 8, top: 8, bottom: 8)),
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => SearchScreen()),
+                // );
+                showSearch(context: context, delegate: SearchScreen());
+              },
               icon: const Icon(
                 Icons.search,
                 color: Colors.white,
@@ -53,84 +79,100 @@ class HomepageState extends State<HomePage> {
                 color: Colors.white,
               ))
         ],
+        // leading: IconButton(
+        //
+        //   onPressed: () {},
+        //   icon: IconButton(
+        //     icon: Icon(Iconsax.add),
+        //     onPressed: () {
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(builder: (context) => HomePage()),
+        //       );
+        //     },
+        //   ),
+        // ),
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-                accountName: const Text("Mayuri Gavli"),
-                accountEmail: const Text("mayuri@gmail.com"),
-                currentAccountPicture: GestureDetector(
-                  child: const CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.person),
-                  ),
-                )),
-            InkWell(
-              onTap: () {},
-              child: const ListTile(
-                title: Text("Home Page"),
-                leading: Icon(Icons.home, color: Colors.red),
-              ),
-            ),
-            InkWell(
-              onTap: () {},
-              child: const ListTile(
-                title: Text("My Account"),
-                leading: Icon(Icons.account_box, color: Colors.red),
-              ),
-            ),
-            InkWell(
-              onTap: () {},
-              child: const ListTile(
-                title: Text("My Orders"),
-                leading: Icon(Icons.shopping_bag, color: Colors.red),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Favourites()),
-                );
-              },
-              child: const ListTile(
-                title: Text("Favourites"),
-                leading: Icon(Icons.favorite, color: Colors.red),
-              ),
-            ),
-            const Divider(),
-            InkWell(
-              onTap: () {},
-              child: const ListTile(
-                title: Text("Settings"),
-                leading: Icon(Icons.account_box, color: Colors.red),
-              ),
-            ),
-            InkWell(
-              onTap: () {},
-              child: const ListTile(
-                title: Text("About Us"),
-                leading: Icon(
-                  Icons.help,
-                  color: Colors.red,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+
+      // drawer: Drawer(
+      //   child: ListView(
+      //     children: <Widget>[
+      //       UserAccountsDrawerHeader(
+      //           accountName: const Text("Mayuri Gavli"),
+      //           accountEmail: const Text("mayuri@gmail.com"),
+      //           currentAccountPicture: GestureDetector(
+      //             child: const CircleAvatar(
+      //               backgroundColor: Colors.white,
+      //               child: Icon(Icons.person),
+      //             ),
+      //           )),
+      //       InkWell(
+      //         onTap: () {},
+      //         child: const ListTile(
+      //           title: Text("Home Page"),
+      //           leading: Icon(Icons.home, color: Colors.red),
+      //         ),
+      //       ),
+      //       InkWell(
+      //         onTap: () {},
+      //         child: const ListTile(
+      //           title: Text("My Account"),
+      //           leading: Icon(Icons.account_box, color: Colors.red),
+      //         ),
+      //       ),
+      //       InkWell(
+      //         onTap: () {},
+      //         child: const ListTile(
+      //           title: Text("My Orders"),
+      //           leading: Icon(Icons.shopping_bag, color: Colors.red),
+      //         ),
+      //       ),
+      //       InkWell(
+      //         onTap: () {
+      //           Navigator.push(
+      //             context,
+      //             MaterialPageRoute(builder: (context) => FavoriteScreen()),
+      //           );
+      //         },
+      //         child: const ListTile(
+      //           title: Text("Favourites"),
+      //           leading: Icon(Icons.favorite, color: Colors.red),
+      //         ),
+      //       ),
+      //       const Divider(),
+      //       InkWell(
+      //         onTap: () {},
+      //         child: const ListTile(
+      //           title: Text("Settings"),
+      //           leading: Icon(Icons.account_box, color: Colors.red),
+      //         ),
+      //       ),
+      //       InkWell(
+      //         onTap: () {},
+      //         child: const ListTile(
+      //           title: Text("About Us"),
+      //           leading: Icon(
+      //             Icons.help,
+      //             color: Colors.red,
+      //           ),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       body: ListView(
         children: <Widget>[
+          const SizedBox(height: 10.0),
           imageCarousel,
           Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 10.0),
                   const Text("Popular Categories",
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 20.0),
                   SizedBox(
                       height: 80,
                       child: ListView.builder(
@@ -138,8 +180,19 @@ class HomepageState extends State<HomePage> {
                         itemCount: 9,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (_, index) {
-                          var categories = ['Anarkali','   Denim',' Dungree','    Gowns','    Kurti','    Sari','  Shorts','     Skirts','Sundress'];
-                          var images = ['images/category/anarkali_crop.png',
+                          var categories = [
+                            'Anarkali',
+                            '   Denim',
+                            ' Dungree',
+                            '    Gowns',
+                            '    Kurti',
+                            '    Sari',
+                            '  Shorts',
+                            '     Skirts',
+                            'Sundress'
+                          ];
+                          var images = [
+                            'images/category/anarkali_crop.png',
                             'images/category/denim-modified.png',
                             'images/category/dungree-modified.png',
                             'images/category/gown1-modified.png',
@@ -179,7 +232,7 @@ class HomepageState extends State<HomePage> {
                   const Padding(padding: EdgeInsets.only(top: 20)),
                   const Text("Best Selling Product",
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 20.0),
                   GridView.builder(
                     itemCount: 6,
                     shrinkWrap: true,
@@ -285,9 +338,16 @@ class TProductCardVertical extends StatelessWidget {
               child: Stack(
                 children: [
                   Troundedimage(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DetailProductScreen()),
+                      );
+                    },
                     imageUrl: items[index]['image'].toString(),
                     applyImageRadius: true,
-                    padding: EdgeInsets.only(top: 10,left: 20),
+                    padding: EdgeInsets.only(top: 10, left: 20),
                   ),
 
                   //sale tag
@@ -409,7 +469,6 @@ class TProductCardVertical extends StatelessWidget {
       ),
     ) ;
   }
-
 }
 
 class Troundedcontainer extends StatelessWidget {
@@ -455,16 +514,17 @@ class Troundedcontainer extends StatelessWidget {
 class Troundedimage extends StatelessWidget {
   const Troundedimage(
       {super.key,
-        this.border,
-        this.width,
-        this.height,
-        required this.imageUrl,
-        this.applyImageRadius = true,
-        this.backgroundColor = Colors.transparent,
-        this.fit = BoxFit.contain,
-        this.padding,
-        this.isNetworkImage = false,
-        this.borderRadius = 16.0});
+      this.onPressed,
+      this.border,
+      this.width,
+      this.height,
+      required this.imageUrl,
+      this.applyImageRadius = true,
+      this.backgroundColor = Colors.transparent,
+      this.fit = BoxFit.contain,
+      this.padding,
+      this.isNetworkImage = false,
+      this.borderRadius = 20.0});
 
   final double? width, height;
   final String imageUrl;
@@ -475,13 +535,13 @@ class Troundedimage extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final bool isNetworkImage;
 
-  // final VoidCallback? onPressed;
+  final VoidCallback? onPressed;
   final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTap: onPressed,
+      onTap: onPressed,
       child: Container(
           width: width,
           height: height,

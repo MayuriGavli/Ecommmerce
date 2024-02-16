@@ -1,42 +1,52 @@
-import 'package:e_commmerce1/LoginScreen.dart';
-import 'package:e_commmerce1/Navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+class EditProfile extends StatefulWidget {
+  const EditProfile({super.key});
 
   @override
-  _SignupScreenState createState() => _SignupScreenState();
+  EditProfileState createState() => EditProfileState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class EditProfileState extends State<EditProfile> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _passwordVisible = false;
-  bool _agreedToTerms = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0.1,
+        title: const Text("Edit Profile"),
+        leading: IconButton(
+          onPressed: () {},
+          icon: IconButton(
+            icon: Icon(Iconsax.arrow_left),
+            onPressed: () {
+              Navigator.pop(context);
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => Navigation()),
+              // );
+            },
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(
-              top: 56.0, left: 20.0, bottom: 24.0, right: 24.0),
+              top: 40.0, left: 20.0, bottom: 24.0, right: 24.0),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    SizedBox(height: 30),
-                    Text("Let's Create New Account",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30)),
-                  ],
+                  children: const [],
                 ),
                 const SizedBox(height: 20.0),
                 Column(
@@ -69,7 +79,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         if (email!.isEmpty) {
                           return 'Enter Valid Email';
                         } else if (!RegExp(
-                            r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
+                                r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
                             .hasMatch(email)) {
                           return 'Enter a valid Email Address';
                         }
@@ -130,55 +140,48 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     const SizedBox(height: 16.0),
 
-                    //I agree to Privacy Policy and Terms of use
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: _agreedToTerms,
-                          onChanged: (value) {
-                            setState(() {
-                              _agreedToTerms = value!;
-                            });
-                          },
-                        ),
-                        const Text("I agree to Privacy Policy and Terms of use")
-                      ],
-                    ),
-
-                    const SizedBox(height: 16.0),
-
-                    //create new account
+                    //save
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
                           // Check if the form is valid and terms are agreed
-                          if (_formKey.currentState!.validate() &&
-                              _agreedToTerms) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Navigation()),
-                            );
-                            _submitForm();
+                          if (_formKey.currentState!.validate()) {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => HomePage()),
+                            // );
+                            // Fluttertoast.showToast(
+                            //     msg: "This is Center Short Toast",
+                            //     toastLength: Toast.LENGTH_SHORT,
+                            //     gravity: ToastGravity.CENTER,
+                            //     timeInSecForIosWeb: 1,
+                            //     backgroundColor: Colors.red,
+                            //     textColor: Colors.white,
+                            //     fontSize: 16.0
+                            // );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Profile Updated"),
+                            ));
+
+                            // _submitForm();
                           }
                         },
-                        child: const Text("Create New Account"),
+                        child: const Text("Save"),
                       ),
                     ),
                     const SizedBox(height: 16.0),
+                    //cancel
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton(
                         onPressed: () {
-                          // Navigate to the SignupScreen
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginScreen()),
-                          );
+                          //Navigate back to profile screen
+                          Navigator.pop(context);
                         },
-                        child: Text("Already Create Account"),
+                        child: Text("Cancel"),
                       ),
                     ),
                   ],

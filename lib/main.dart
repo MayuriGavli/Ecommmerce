@@ -1,11 +1,11 @@
 //
 // import 'dart:html';
 
-import 'package:e_commmerce1/HomePage.dart';
+import 'package:e_commmerce1/Navigation.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MaterialApp(
-    home: HomePage(),
+  runApp(MaterialApp(
+    home: Navigation(),
   ));
 }

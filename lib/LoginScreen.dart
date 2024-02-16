@@ -1,4 +1,4 @@
-import 'package:e_commmerce1/HomePage.dart';
+import 'package:e_commmerce1/Navigation.dart';
 import 'package:flutter/material.dart';
 
 import 'SignScreen.dart';
@@ -140,7 +140,7 @@ class LoginScreenState extends State<LoginScreen> {
                 if (_formKey.currentState!.validate()) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => Navigation()),
                   );
                 }
               },
