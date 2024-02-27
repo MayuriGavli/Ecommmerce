@@ -1,7 +1,8 @@
 import 'package:e_commmerce1/Navigation.dart';
 import 'package:e_commmerce1/usr_auth/firebase_auth_implementation/firebase_auth_service.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
 import 'SignScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -69,7 +70,10 @@ class LoginScreenState extends State<LoginScreen> {
 
     if (user != null) {
       print("User is Successfully SignIn");
-      Navigator.pushNamed(context, "Navigation()");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Navigation()),
+      );
     } else {
       print("Invalid crendensal");
     }
