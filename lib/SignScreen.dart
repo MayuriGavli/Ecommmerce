@@ -1,5 +1,7 @@
 import 'package:e_commmerce1/LoginScreen.dart';
 import 'package:e_commmerce1/Navigation.dart';
+import 'package:e_commmerce1/usr_auth/firebase_auth_implementation/firebase_auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -10,6 +12,7 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  final FirebaseAuthService _auth = FirebaseAuthService();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -19,6 +22,14 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _agreedToTerms = false;
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
@@ -155,12 +166,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           // Check if the form is valid and terms are agreed
                           if (_formKey.currentState!.validate() &&
                               _agreedToTerms) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Navigation()),
-                            );
-                            _submitForm();
+                            _signUp();
                           }
                         },
                         child: const Text("Create New Account"),
@@ -191,19 +197,21 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  void _submitForm() {
-    // Perform the form submission logic here
+  void _signUp() async {
     String name = _nameController.text;
     String email = _emailController.text;
-    String phone = _phoneController.text;
     String password = _passwordController.text;
+    String PhoneNo = _phoneController.text;
 
-    // For demonstration purposes, just print the form data
-    print('Name: $name');
-    print('Email: $email');
-    print('Phone: $phone');
-    print('Password: $password');
-
-    // Add your logic to handle the form submission
+    User? user = await _auth.signupWithEmailAndPassword(email, password);
+    if (user != null) {
+      print("User is Successfully Created");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Navigation()),
+      );
+    } else {
+      print("Some Error Happened");
+    }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:e_commmerce1/Navigation.dart';
+import 'package:e_commmerce1/usr_auth/firebase_auth_implementation/firebase_auth_service.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'SignScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,6 +12,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
+  final FirebaseAuthService _auth = FirebaseAuthService();
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -18,6 +20,12 @@ class LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
@@ -30,11 +38,11 @@ class LoginScreenState extends State<LoginScreen> {
                 children: [
                   const Image(
                     height: 120,
-                    width: 150,
+                    width: 230,
                     image: AssetImage("images/logo/logo_1.png"),
                   ),
                   Text(
-                    " Welcome,",
+                    "          Welcome,",
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
                   const SizedBox(height: 8.0),
@@ -53,6 +61,20 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  void _signIn() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    User? user = await _auth.signInwithemailandpassword(email, password);
+
+    if (user != null) {
+      print("User is Successfully SignIn");
+      Navigator.pushNamed(context, "Navigation()");
+    } else {
+      print("Invalid crendensal");
+    }
+  }
+
   Widget buildLoginForm() {
     return Form(
       key: _formKey,
@@ -69,7 +91,7 @@ class LoginScreenState extends State<LoginScreen> {
               if (email!.isEmpty) {
                 return 'Enter Valid Email';
               } else if (!RegExp(
-                      r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
+                  r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
                   .hasMatch(email)) {
                 return 'Enter a valid Email Address';
               }
@@ -138,10 +160,7 @@ class LoginScreenState extends State<LoginScreen> {
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Navigation()),
-                  );
+                  _signIn();
                 }
               },
               child: Text("Sign In"),

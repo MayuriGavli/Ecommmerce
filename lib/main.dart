@@ -1,11 +1,20 @@
 //
 // import 'dart:html';
 
-import 'package:e_commmerce1/Navigation.dart';
+import 'package:e_commmerce1/LoginScreen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+// import 'package:firebase_core/firebase_core.dart';
+
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MaterialApp(
-    home: Navigation(),
+    home: LoginScreen(),
   ));
 }

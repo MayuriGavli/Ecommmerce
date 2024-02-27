@@ -1,5 +1,27 @@
 import 'package:flutter/material.dart';
 
+//
+// class AppBar extends StatelessWidget implements PreferredSizeWidget{
+//   const AppBar({super.key,this.title,this.showbackArrow=false,this.leadingIcon,this.actions,this.leadingOnPressed,});
+//
+//   final Widget? title;
+//   final bool showbackArrow;
+//   final IconData? leadingIcon;
+//   final List<Widget>? actions;
+//   final VoidCallback? leadingOnPressed;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(padding: EdgeInsets.symmetric(horizontal: 16.0),
+//       child: AppBar(
+//         auto
+//         leading : showbackArrow? IconButton(onPressed: () => Get.back(), icon: Icon(Iconsax.arrow_left): leadin)
+//       ),
+//     );
+//   }
+// }
+
+//1 way=================================================
 class SearchScreen extends SearchDelegate {
   List<String> SearchTerms = [
     'Sundress',
@@ -76,7 +98,8 @@ class SearchScreen extends SearchDelegate {
     );
   }
 }
-
+//===============================================
+//2nd way
 // class SearchScreen extends StatefulWidget {
 //   @override
 //   _SearchScreenState createState() => _SearchScreenState();

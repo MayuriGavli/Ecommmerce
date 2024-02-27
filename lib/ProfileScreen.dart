@@ -1,5 +1,6 @@
 import 'package:e_commmerce1/EditProfile.dart';
 import 'package:e_commmerce1/LoginScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -105,6 +106,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                                     child: Text("No")),
                                 TextButton(
                                     onPressed: () {
+                                      FirebaseAuth.instance.signOut();
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(

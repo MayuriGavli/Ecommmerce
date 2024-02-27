@@ -13,6 +13,7 @@ class FavoriteScreenState extends State<FavoriteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0.1,
         title: const Text("FAVOURITE"),
@@ -26,7 +27,7 @@ class FavoriteScreenState extends State<FavoriteScreen> {
       body: ListView(
         children: <Widget>[
           Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -148,7 +149,7 @@ class TProductCardVertical extends StatelessWidget {
         child: Column(
           children: [
             Troundedcontainer(
-              height: 175,
+              height: 160,
               width: 900,
               // padding: const EdgeInsets.only(left: 20,top: 7),
               backgroundColor: Colors.transparent,

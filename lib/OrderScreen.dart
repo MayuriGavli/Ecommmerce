@@ -12,6 +12,7 @@ class OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0.1,
         title: const Text("My Order"),
@@ -86,7 +87,7 @@ class OrderItems extends StatelessWidget {
       itemBuilder: (_, index) => RoundedContainer(
         index,
         showBorder: true,
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(12.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

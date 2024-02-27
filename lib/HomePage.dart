@@ -53,9 +53,11 @@ class HomepageState extends State<HomePage> {
     );
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0.1,
         title: const Text("SHOPPING APP"),
+        backgroundColor: Colors.blue,
         actions: <Widget>[
           const Padding(
               padding: EdgeInsets.only(right: 8, left: 8, top: 8, bottom: 8)),
@@ -161,16 +163,17 @@ class HomepageState extends State<HomePage> {
       //   ),
       // ),
       body: ListView(
+        // child: Column(
         children: <Widget>[
           const SizedBox(height: 10.0),
           imageCarousel,
           Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(1.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 10.0),
-                  const Text("Popular Categories",
+                  const Text("  Popular Categories",
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 20.0),
                   SizedBox(
@@ -181,16 +184,18 @@ class HomepageState extends State<HomePage> {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (_, index) {
                           var categories = [
-                            'Anarkali',
-                            '   Denim',
-                            ' Dungree',
-                            '    Gowns',
-                            '    Kurti',
-                            '    Sari',
-                            '  Shorts',
-                            '     Skirts',
-                            'Sundress'
+                            '     Anarkali',
+                            '      Denim',
+                            '     Dungree',
+                            '      Gowns',
+                            '        Kurti',
+                            '  '
+                                '      Sari',
+                            '     Shorts',
+                            '      Skirts',
+                            '   Sundress'
                           ];
+
                           var images = [
                             'images/category/anarkali_crop.png',
                             'images/category/denim-modified.png',
@@ -203,36 +208,37 @@ class HomepageState extends State<HomePage> {
                             'images/category/sundress1-modified.png'];
                           return GestureDetector(
                               child: Padding(
-                                  padding: const EdgeInsets.only(right: 16.0),
+                                  padding: const EdgeInsets.only(right: 10.0),
                                   child: Column(children: [
                                     Container(
-                                      width: 56,
-                                      height: 56,
-                                      decoration: BoxDecoration(
-                                          color: Colors.black12,
-                                          borderRadius:
-                                          BorderRadius.circular(100)),
-                                      child: Image(
-                                          image: AssetImage(images[index]),
-                                          fit: BoxFit.fill),
-                                    ),
-                                    const SizedBox(height: 16.0 / 2),
+                                        width: 56,
+                                        height: 56,
+                                        decoration: BoxDecoration(
+                                            color: Colors.black12,
+                                            borderRadius:
+                                                BorderRadius.circular(100)),
+                                        child: Image(
+                                            image: AssetImage(images[index]),
+                                            fit: BoxFit.fill)),
+                                    const SizedBox(height: 5.0),
                                     SizedBox(
-                                        width: 55,
-                                        child: Text(categories[index],
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelMedium!
-                                                .apply(color: Colors.black),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis))
+                                        width: 70,
+                                        // height: 10,
+                                        child: Text(
+                                          categories[index],
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 10),
+                                          maxLines: 4,
+                                          // overflow: TextOverflow.ellipsis
+                                        ))
                                   ])));
                         },
                       )),
-                  const Padding(padding: EdgeInsets.only(top: 20)),
-                  const Text("Best Selling Product",
+                  const Padding(padding: EdgeInsets.only(top: 10)),
+                  const Text("  Best Selling Product",
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 20.0),
+                  const SizedBox(height: 10.0),
                   GridView.builder(
                     itemCount: 6,
                     shrinkWrap: true,
@@ -284,7 +290,7 @@ class TProductCardVertical extends StatelessWidget {
         'company_name': 'Meesho',
         'is_company_verified': false,
         'price': "\$500.00",
-        'image': 'images/products/skirt.png',
+        'image': 'images/products/longskirt.png',
         'discount': '50%',
         'isFavorite': true,
       },
@@ -330,7 +336,7 @@ class TProductCardVertical extends StatelessWidget {
         child: Column(
           children: [
             Troundedcontainer(
-              height: 175,
+              height: 170,
               width: 900,
               // padding: const EdgeInsets.only(left: 20,top: 7),
               backgroundColor: Colors.transparent,
@@ -347,7 +353,7 @@ class TProductCardVertical extends StatelessWidget {
                     },
                     imageUrl: items[index]['image'].toString(),
                     applyImageRadius: true,
-                    padding: EdgeInsets.only(top: 10, left: 20),
+                    padding: EdgeInsets.only(top: 15, left: 30),
                   ),
 
                   //sale tag

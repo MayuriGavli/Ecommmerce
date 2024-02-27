@@ -412,7 +412,7 @@ class TProductCardVertical extends StatelessWidget {
         'company_name': 'Meesho',
         'is_company_verified': false,
         'price': "\$500.00",
-        'image': 'images/products/skirt.png',
+        'image': 'images/products/longskirt.png',
         'discount': '50%',
         'isFavorite': true,
       },
