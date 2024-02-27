@@ -4,6 +4,8 @@ import 'package:e_commmerce1/usr_auth/firebase_auth_implementation/firebase_auth
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'Providers/SharedPreferencesService.dart';
+
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
@@ -206,6 +208,7 @@ class _SignupScreenState extends State<SignupScreen> {
     User? user = await _auth.signupWithEmailAndPassword(email, password);
     if (user != null) {
       print("User is Successfully Created");
+      await SharedPreferencesService.saveValue('user', user.toString());
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Navigation()),

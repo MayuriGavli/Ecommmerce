@@ -1,6 +1,3 @@
-//
-// import 'dart:html';
-
 import 'package:e_commmerce1/LoginScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

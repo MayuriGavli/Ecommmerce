@@ -3,6 +3,7 @@ import 'package:e_commmerce1/usr_auth/firebase_auth_implementation/firebase_auth
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'Providers/SharedPreferencesService.dart';
 import 'SignScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -70,6 +71,7 @@ class LoginScreenState extends State<LoginScreen> {
 
     if (user != null) {
       print("User is Successfully SignIn");
+      await SharedPreferencesService.saveValue('user_email', 'vatana');
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Navigation()),

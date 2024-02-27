@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
+import 'Providers/SharedPreferencesService.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -12,7 +14,14 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class ProfileScreenState extends State<ProfileScreen> {
+  String _user_email = '';
+
   @override
+  void initState() {
+    super.initState();
+    _getUser();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -61,12 +70,11 @@ class ProfileScreenState extends State<ProfileScreen> {
                   textAlign: TextAlign.right,
                   style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 30.0),
-
               ProfileMenu(onPressed: () {}, title: "User ID", value: "2002"),
               ProfileMenu(
                   onPressed: () {}, title: "UserName", value: "Gavli Mayuri"),
               ProfileMenu(
-                  onPressed: () {}, title: "E-mail", value: "mayuri@gmail.com"),
+                  onPressed: () {}, title: "E-mail", value: _user_email),
               ProfileMenu(onPressed: () {}, title: "Password", value: "1234"),
               ProfileMenu(
                   onPressed: () {}, title: "Phone Number", value: "1234567890"),
@@ -98,28 +106,28 @@ class ProfileScreenState extends State<ProfileScreen> {
                     showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text("No")),
-                                TextButton(
-                                    onPressed: () {
-                                      FirebaseAuth.instance.signOut();
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                LoginScreen()),
-                                      );
-                                    },
-                                    child: Text("Yes"))
-                              ],
-                              title: Text("Logging Out"),
-                              contentPadding: EdgeInsets.all(20.0),
-                              content: Text("Are You Sure?"),
-                            ));
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("No")),
+                            TextButton(
+                                onPressed: () {
+                                  FirebaseAuth.instance.signOut();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            LoginScreen()),
+                                  );
+                                },
+                                child: Text("Yes"))
+                          ],
+                          title: Text("Logging Out"),
+                          contentPadding: EdgeInsets.all(20.0),
+                          content: Text("Are You Sure?"),
+                        ));
                   },
                   child: Text("Log Out"),
                 ),
@@ -159,6 +167,14 @@ class ProfileScreenState extends State<ProfileScreen> {
         )
       ]),
     );
+  }
+
+  void _getUser() async {
+    String? userEmail =
+        await SharedPreferencesService.loadStoredValue('user_email');
+    setState(() {
+      _user_email = userEmail!;
+    });
   }
 }
 
