@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesService {
   // Function to load the stored value from SharedPreferences
-  static Future<Object?> loadStoredValue(String key) async {
+  static Future<String?> loadStoredValue(String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs
         .getString(key); // If the key doesn't exist, set a default value
