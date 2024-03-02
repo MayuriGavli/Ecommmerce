@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commmerce1/EditProfile.dart';
 import 'package:e_commmerce1/LoginScreen.dart';
 import 'package:e_commmerce1/Models/UserModel.dart';
+import 'package:e_commmerce1/Providers/SharedPreferencesService.dart';
+import 'package:e_commmerce1/Singleton/AppSingleton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -23,6 +25,10 @@ class ProfileScreenState extends State<ProfileScreen> {
   File? _selectedImage;
 
   String _user_email = '';
+  String _user_name = '';
+  String _user_password = '';
+  String _user_phoneNo = '';
+  String _user_id = '';
 
   void showAlert() {
     QuickAlert.show(context: context, type: QuickAlertType.confirm);
@@ -31,7 +37,13 @@ class ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // _getUser();
+    _user_name = appSingletonInstance.userDataFromSingleton.userName ?? '';
+    _user_email = appSingletonInstance.userDataFromSingleton.userEmail ?? '';
+    _user_password =
+        appSingletonInstance.userDataFromSingleton.userPassword ?? '';
+    _user_phoneNo =
+        appSingletonInstance.userDataFromSingleton.userPhoneNo ?? '';
+    _user_id = appSingletonInstance.userDataFromSingleton.id ?? '';
   }
 
   Widget build(BuildContext context) {
@@ -119,14 +131,17 @@ class ProfileScreenState extends State<ProfileScreen> {
                   textAlign: TextAlign.right,
                   style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 30.0),
-              ProfileMenu(onPressed: () {}, title: "User ID", value: "2002"),
+              // ProfileMenu(onPressed: () {}, title: "User ID", value: _user_id),
               ProfileMenu(
-                  onPressed: () {}, title: "UserName", value: "Gavli Mayuri"),
+                  onPressed: () {}, title: "UserName", value: _user_name),
               ProfileMenu(
                   onPressed: () {}, title: "E-mail", value: _user_email),
-              ProfileMenu(onPressed: () {}, title: "Password", value: "1234"),
               ProfileMenu(
-                  onPressed: () {}, title: "Phone Number", value: "1234567890"),
+                  onPressed: () {}, title: "Password", value: _user_password),
+              ProfileMenu(
+                  onPressed: () {},
+                  title: "Phone Number",
+                  value: _user_phoneNo),
               const SizedBox(height: 16),
               const Divider(),
 
@@ -163,7 +178,9 @@ class ProfileScreenState extends State<ProfileScreen> {
                             TextButton(
                                 onPressed: () {
                                   FirebaseAuth.instance.signOut();
-                                  Navigator.push(
+                                      sharedPrefrenceInstance.saveValue(
+                                          'userData', ''); //Logout Code
+                                      Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>

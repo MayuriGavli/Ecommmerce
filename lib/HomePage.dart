@@ -62,12 +62,11 @@ class HomepageState extends State<HomePage> {
               padding: EdgeInsets.only(right: 8, left: 8, top: 8, bottom: 8)),
           IconButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) => SearchScreen()),
-                // );
-                showSearch(context: context, delegate: SearchScreen());
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchScreen()),
+                );
+                // showSearch(context: context, delegate: _SearchScreenState());
               },
               icon: const Icon(
                 Icons.search,

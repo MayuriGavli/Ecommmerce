@@ -3,11 +3,13 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_commmerce1/Models/ProductDetailsModel.dart';
+import 'package:e_commmerce1/Navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quickalert/quickalert.dart';
+
+import 'Models/BuyNowDetailsModel.dart';
 
 class BuyNowScreen extends StatefulWidget {
   const BuyNowScreen({super.key});
@@ -30,13 +32,6 @@ class BuyNowScreenState extends State<BuyNowScreen> {
 
   File? _selectedImage;
   File? _nameImageName;
-
-  void showAlert() {
-    QuickAlert.show(
-        context: context,
-        type: QuickAlertType.success,
-        text: "Order Booked Successfully");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +154,7 @@ class BuyNowScreenState extends State<BuyNowScreen> {
                           // Check if the form is valid and terms are agreed
                           if (_formKey.currentState!.validate()) {
                             _AddProduct();
-                            showAlert();
+                            showAlert(context);
                             // // ScaffoldMessenger.of(context)
                             // //     .showSnackBar(const SnackBar(
                             // //   content: Text("Product Added Successfully"),
@@ -191,27 +186,45 @@ class BuyNowScreenState extends State<BuyNowScreen> {
     );
   }
 
+  void showAlert(BuildContext context) {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.success,
+      confirmBtnText: 'Continue Shopping',
+      onConfirmBtnTap: () {
+        _handleContinueShopping(context);
+      },
+      text: "Order Booked Successfully",
+    );
+  }
+
+  void _handleContinueShopping(BuildContext context) {
+    // Do something when the "Continue Shopping" button is pressed
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Navigation()),
+    );
+  }
+
   void _AddProduct() async {
-    String ProductName = _phoneController
+    String Phone = _phoneController
         .text; //here ypu have to change name and have to create new user model
-    String CompanyName = _ShippingAddressController.text;
-    String Discount = _PaymentMethodController.text;
+    String ShippingAddress = _ShippingAddressController.text;
+    String PaymentMethod = _PaymentMethodController.text;
     String ProductPrice = _PriceController.text;
 
     //new Code of HR
     // Harsha - 28-02-24 - Inserted the data into firebase table named as 'User'
     final productTableObject = FirebaseFirestore.instance
-        .collection('Product')
+        .collection('PaymentDetails')
         .doc(); //get the user table and made object
-    final productData = ProductDetailsModel(
+    final productData = PaymentDetailsModel(
         id: productTableObject.id,
-        ProductName: ProductName,
-        CompanyName: CompanyName,
-        Discount: Discount,
-        ProductPrice: ProductPrice,
-        imageURL: _selectedImage
-            .toString()
-            .substring(6)); //making an object of user data
+        ShippingAddress: ShippingAddress,
+        phone: Phone,
+        PaymentMethod: PaymentMethod,
+        ProductPrice: ProductPrice);
+    //making an object of user data
     final jsonData = productData.toJson(); // Converted the userdata into json
     await productTableObject.set(jsonData).then((obj) {
       //checking if the data is inserted oor not

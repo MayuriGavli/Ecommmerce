@@ -9,6 +9,26 @@ class DetailProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        elevation: 0.1,
+        title: const Text(""),
+        leading: IconButton(
+          onPressed: () {},
+          icon: IconButton(
+            icon: Icon(Iconsax.arrow_left),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        // centerTitle: true,
+
+        actions: const <Widget>[
+          Padding(
+              padding: EdgeInsets.only(right: 8, left: 8, top: 8, bottom: 8)),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -18,7 +38,7 @@ class DetailProductsScreen extends StatelessWidget {
                   const SizedBox(
                     height: 400,
                     child: Padding(
-                        padding: EdgeInsets.fromLTRB(15, 30, 15, 17),
+                        padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
                         child: Center(
                           child: Image(
                               image: AssetImage("images/products/sadi.png")),

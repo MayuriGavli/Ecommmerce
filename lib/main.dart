@@ -1,6 +1,12 @@
-import 'package:e_commmerce1/BuyNow.dart';
+import 'dart:convert';
+
+import 'package:e_commmerce1/LoginScreen.dart';
+import 'package:e_commmerce1/Models/UserModel.dart';
+import 'package:e_commmerce1/Navigation.dart';
+import 'package:e_commmerce1/Singleton/AppSingleton.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:firebase_core/firebase_core.dart';
 
@@ -8,11 +14,47 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  Widget Screen; //Varibale for navigation
+  SharedPreferences pref =
+      await SharedPreferences.getInstance(); //SharedPrefrence Object
+  var data =
+      pref.getString('userData'); //getting the data from shared prefrence
+
+  if (data == '') {
+    // if empty then navigate to login screen
+    print("String Empty");
+    Screen = LoginScreen();
+  } else {
+    Map json = jsonDecode(data ?? ''); //decoding data
+    appSingletonInstance.userDataFromSingleton =
+        UserModel.fromJsonforDynameic(json); //converting
+
+    print("---------------------------");
+    print(appSingletonInstance.userDataFromSingleton.userName);
+    print("---------------------------");
+
+    if (appSingletonInstance.userDataFromSingleton.userEmail.isNotEmpty &&
+        appSingletonInstance.userDataFromSingleton.userEmail ==
+            'mrgavli28@gmail.com') {
+      //Navigate to Admin Portel
+      // Screen = Admin();
+      Screen = Navigation();
+    } else if (appSingletonInstance
+        .userDataFromSingleton.userEmail.isNotEmpty) {
+      //navigate inside the App
+      Screen = Navigation();
+    } else {
+      //Navigate to Login Screen
+      Screen = LoginScreen();
+    }
+  }
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MaterialApp(
-    home: BuyNowScreen(),
+  runApp(MaterialApp(
+    home: Screen,
   ));
 }
 

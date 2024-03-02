@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
+import 'Singleton/AppSingleton.dart';
+
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
 
@@ -17,6 +19,17 @@ class EditProfileState extends State<EditProfile> {
   bool _passwordVisible = false;
 
   @override
+  void initState() {
+    super.initState();
+    _nameController.text = appSingletonInstance.userDataFromSingleton.userName;
+    _emailController.text =
+        appSingletonInstance.userDataFromSingleton.userEmail ?? '';
+    _passwordController.text =
+        appSingletonInstance.userDataFromSingleton.userPassword ?? '';
+    _phoneController.text =
+        appSingletonInstance.userDataFromSingleton.userPhoneNo ?? '';
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -53,6 +66,7 @@ class EditProfileState extends State<EditProfile> {
                   children: [
                     //username
                     TextFormField(
+                      // initialValue: 'fdsdf',
                       controller: _nameController,
                       decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.person),

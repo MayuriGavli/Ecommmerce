@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:e_commmerce1/Models/UserModel.dart';
 import 'package:e_commmerce1/Navigation.dart';
+import 'package:e_commmerce1/Singleton/AppSingleton.dart';
 import 'package:e_commmerce1/usr_auth/firebase_auth_implementation/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'Providers/SharedPreferencesService.dart';
 import 'SignScreen.dart';
@@ -20,6 +24,7 @@ class LoginScreen extends StatefulWidget {
 
 class LoginScreenState extends State<LoginScreen> {
   User? _user;
+
   final FirebaseAuthService _auth = FirebaseAuthService();
 
   // final SharedPreferencesService _prefs = SharedPreferencesService();
@@ -32,7 +37,20 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    // _auth.auth
+
+    // if (appSingletonInstance.userName.isNotEmpty){
+    //   print("---------------------------");
+    //   print(appSingletonInstance.userName);
+    //   print("---------------------------");
+    //
+    //   Navigator.of(context).pushNamed(Navigation() as String);
+    //
+    //   // setState(() {});
+    //     // Navigator.push(
+    //     //   context,
+    //     //   MaterialPageRoute(builder: (context) => Navigation()),
+    //     // );
+    //   }
   }
 
   void dispose() {
@@ -94,7 +112,7 @@ class LoginScreenState extends State<LoginScreen> {
               if (email!.isEmpty) {
                 return 'Enter Valid Email';
               } else if (!RegExp(
-                      r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
+                  r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
                   .hasMatch(email)) {
                 return 'Enter a valid Email Address';
               }
@@ -189,13 +207,13 @@ class LoginScreenState extends State<LoginScreen> {
             children: [
               Flexible(
                   child: Divider(
-                color: Colors.grey,
-              )),
+                    color: Colors.grey,
+                  )),
               Text("Or Sign In With"),
               Flexible(
                   child: Divider(
-                color: Colors.grey,
-              )),
+                    color: Colors.grey,
+                  )),
             ],
           ),
           const SizedBox(height: 27.0),
@@ -234,7 +252,7 @@ class LoginScreenState extends State<LoginScreen> {
       idToken: googleAuth?.idToken,
     );
     UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+    await FirebaseAuth.instance.signInWithCredential(credential);
     print(userCredential.user?.displayName);
   }
 
@@ -244,7 +262,7 @@ class LoginScreenState extends State<LoginScreen> {
     String password = _passwordController.text;
     var userData = await UserModel.getSingledata(email);
 
-    if (userData.userEmail != email) {
+    if (userData.userEmail == '') {
       // you have to addd validation
       Fluttertoast.showToast(
           msg: "Enter Valid E-mail & Password",
@@ -255,36 +273,17 @@ class LoginScreenState extends State<LoginScreen> {
           textColor: Colors.white,
           fontSize: 16.0);
     } else {
+      appSingletonInstance.userDataFromSingleton =
+          userData; //saving data in Global Variable
+      SharedPreferences sharedPreferenceInstance =
+          await SharedPreferences.getInstance(); //Shared prefrence object
+      String userDataEncodeInJson = jsonEncode(userData); // encoding data
+      sharedPreferenceInstance.setString(
+          'userData', userDataEncodeInJson); //saving data into shared prefrence
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Navigation()),
       );
     }
-
-    // This Code is being moved in 'UserModel.getSingledata(email)' Function.
-    /*
-    final userTableObject = await FirebaseFirestore.instance.collection('User').where("userEmail",isEqualTo: email).get();
-    var userData = userTableObject.docs.map((e) => UserModel.fromSnapshot(e)).single;
-    print(userData.userEmail);
-    print(userData.userName);
-    print(userData.userPassword);
-    print(userData.userPhoneNo);
-    print(userData.id);
-     */
-
-    // User? user = await _auth.signInwithemailandpassword(email, password);
-    //
-    // if (user != null) {
-    //   print("User is Successfully SignIn");
-    //   // await _prefs.saveValue('user_email', 'vatana');
-    //   // await _prefs.saveValue('user_email', 'vatana');
-    //
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => Navigation()),
-    //   );
-    // } else {
-    //   print("Invalid crendensal");
-    // }
   }
 }

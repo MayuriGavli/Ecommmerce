@@ -34,8 +34,7 @@ dependencies:
   sign_in_button: ^3.0.0
   image_picker: ^1.0.7
   quickalert: ^1.0.2
-
-#  shared_preferences: ^2.2.2
+  shared_preferences: ^2.0.6
 #  sqflite: ^2.0.0
 #  path: ^1.8.0
 #  firebase_core: ^2.25.4

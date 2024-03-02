@@ -1,58 +1,53 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProductDetailsModel {
+class PaymentDetailsModel {
   String id;
-  final String ProductName;
-  final String CompanyName;
-  final String Discount;
+  final String ShippingAddress;
+  final String phone;
+  final String PaymentMethod;
   final String ProductPrice;
-  final imageURL;
 
-  ProductDetailsModel({
+  PaymentDetailsModel({
     this.id = '',
-    required this.ProductName,
-    required this.CompanyName,
-    required this.Discount,
+    required this.ShippingAddress,
+    required this.phone,
+    required this.PaymentMethod,
     required this.ProductPrice,
-    required this.imageURL,
   });
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'ProductName': ProductName,
-        'CompanyName': CompanyName,
-        'Discount': Discount,
+        'ShippingAddress': ShippingAddress,
+        'phone': phone,
+        'PaymentMethod': PaymentMethod,
         'ProductPrice': ProductPrice,
-        'imageURL': imageURL,
       };
 
-  static ProductDetailsModel fromJson(Map<String, dynamic> jsonData) =>
-      ProductDetailsModel(
-        ProductName: jsonData['ProductName'],
-        CompanyName: jsonData['CompanyName'],
-        Discount: jsonData['Discount'],
+  static PaymentDetailsModel fromJson(Map<String, dynamic> jsonData) =>
+      PaymentDetailsModel(
+        ShippingAddress: jsonData['ShippingAddress'],
+        phone: jsonData['phone'],
+        PaymentMethod: jsonData['PaymentMethod'],
         ProductPrice: jsonData['ProductPrice'],
-        imageURL: jsonData['imageURL'],
       );
 
-  factory ProductDetailsModel.fromSnapshot(
+  factory PaymentDetailsModel.fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> jsonData) {
     final data = jsonData.data()!;
-    return ProductDetailsModel(
-      ProductName: data['ProductName'],
-      CompanyName: data['CompanyName'],
-      Discount: data['Discount'],
+    return PaymentDetailsModel(
+      ShippingAddress: data['ShippingAddress'],
+      phone: data['phone'],
+      PaymentMethod: data['PaymentMethod'],
       ProductPrice: data['ProductPrice'],
-      imageURL: jsonData['imageURL'],
     );
   }
 
-  static Future<List<ProductDetailsModel>> getAllProductDetail() async {
+  static Future<List<PaymentDetailsModel>> getAllProductDetail() async {
     final productTableObject =
-        await FirebaseFirestore.instance.collection('Product').get();
+        await FirebaseFirestore.instance.collection('PaymentDetails').get();
     final productData = productTableObject.docs
         .map((QueryDocumentSnapshot<Map<String, dynamic>> e) =>
-            ProductDetailsModel.fromJson(e as Map<String, dynamic>))
+            PaymentDetailsModel.fromJson(e as Map<String, dynamic>))
         .toList();
     if (productData.length > 0) {
       return productData;
