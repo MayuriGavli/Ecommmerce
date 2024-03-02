@@ -1,5 +1,6 @@
 import 'package:e_commmerce1/AddProductScreen.dart';
 import 'package:e_commmerce1/EditProductScreen.dart';
+import 'package:e_commmerce1/Models/ProductDetailsModel.dart';
 import 'package:flutter/material.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iconsax/iconsax.dart';
@@ -22,6 +23,7 @@ class _AdminState extends State<Admin> {
   TextEditingController brandController = TextEditingController();
   GlobalKey<FormState> _categoryFormKey = GlobalKey();
   GlobalKey<FormState> _brandFormKey = GlobalKey();
+  var AllProductData = ProductDetailsModel.getAllProductDetail();
 
   // BrandService _brandService = BrandService();
   // CategoryService _categoryService = CategoryService();
@@ -49,6 +51,7 @@ class _AdminState extends State<Admin> {
                   child: TextButton.icon(
                       onPressed: () {
                         setState(() => _selectedPage = Page.manage);
+                        // var AllProductData = ProductDetailsModel.getAllProductDetail();
                       },
                       icon: Icon(
                         Icons.sort,
@@ -104,7 +107,7 @@ class _AdminState extends State<Admin> {
                     crossAxisCount: 2),
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.all(18.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Card(
                       child: ListTile(
                           title: TextButton.icon(
@@ -121,7 +124,7 @@ class _AdminState extends State<Admin> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(18.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Card(
                       child: ListTile(
                           title: TextButton.icon(
@@ -138,7 +141,7 @@ class _AdminState extends State<Admin> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(22.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Card(
                       child: ListTile(
                           title: TextButton.icon(
@@ -155,7 +158,7 @@ class _AdminState extends State<Admin> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(22.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Card(
                       child: ListTile(
                           title: TextButton.icon(
@@ -172,7 +175,7 @@ class _AdminState extends State<Admin> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(22.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Card(
                       child: ListTile(
                           title: TextButton.icon(
@@ -189,7 +192,7 @@ class _AdminState extends State<Admin> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(22.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Card(
                       child: ListTile(
                           title: TextButton.icon(
@@ -383,7 +386,6 @@ class _AdminState extends State<Admin> {
 
 class TProductCardVertical extends StatelessWidget {
   const TProductCardVertical(this.index, {super.key});
-
   final int index;
 
   @override
@@ -476,7 +478,7 @@ class TProductCardVertical extends StatelessWidget {
         child: Column(
           children: [
             Troundedcontainer(
-              height: 175,
+              height: 160,
               width: 900,
               // padding: const EdgeInsets.only(left: 20,top: 7),
               backgroundColor: Colors.transparent,
@@ -704,3 +706,4 @@ class Troundedimage extends StatelessWidget {
 }
 
 class FlatButton {}
+

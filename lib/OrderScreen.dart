@@ -14,6 +14,7 @@ class OrderScreenState extends State<OrderScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         elevation: 0.1,
         title: const Text("My Order"),
         centerTitle: true,

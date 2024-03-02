@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commmerce1/LoginScreen.dart';
+import 'package:e_commmerce1/Models/UserModel.dart';
 import 'package:e_commmerce1/Navigation.dart';
 import 'package:e_commmerce1/usr_auth/firebase_auth_implementation/firebase_auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'Providers/SharedPreferencesService.dart';
+// import 'Providers/SharedPreferencesService.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -42,9 +43,9 @@ class _SignupScreenState extends State<SignupScreen> {
             key: _formKey,
             child: Column(
               children: [
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     SizedBox(height: 30),
                     Text("Let's Create New Account",
                         style: TextStyle(
@@ -164,10 +165,18 @@ class _SignupScreenState extends State<SignupScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           // Check if the form is valid and terms are agreed
                           if (_formKey.currentState!.validate() &&
                               _agreedToTerms) {
+                            // Map<String,dynamic> employeeInfoMap={
+                            //    "id": id,
+                            //   "UserName":_nameController.text,
+                            //   "Useremail":_emailController.text,
+                            //   "UserPassword":_passwordController.text,
+                            //   "UserPhone":_phoneController.text,
+                            // };
+                            // await DatabaseMethods().addUserdetails(employeeInfoMap, id);
                             _signUp();
                           }
                         },
@@ -203,12 +212,41 @@ class _SignupScreenState extends State<SignupScreen> {
     String name = _nameController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
-    String PhoneNo = _phoneController.text;
+    String phoneNo = _phoneController.text;
+
+    //new Code of HR
+    // Harsha - 28-02-24 - Inserted the data into firebase table named as 'User'
+    // final docUser = FirebaseFirestore.instance.collection('User').doc(); //get the user table and made object
+    final userTableObject = FirebaseFirestore.instance
+        .collection('User')
+        .doc(); //get the user table and made object
+    final userData = UserModel(
+        id: userTableObject.id,
+        userName: name,
+        userEmail: email,
+        userPassword: password,
+        userPhoneNo: phoneNo); //making an object of user data
+    final jsonData = userData.toJson(); // Converted the userdata into json
+    await userTableObject.set(jsonData).then((obj) {
+      //checking if the data is inserted oor not
+      print("data inserted succesfully");
+      print("=================");
+      print(userTableObject.id);
+      print("=================");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Navigation()),
+      );
+    }).catchError((onError) {
+      print(onError);
+    });
+
+    /* //Old code of MR
 
     User? user = await _auth.signupWithEmailAndPassword(email, password);
     if (user != null) {
       print("User is Successfully Created");
-      await SharedPreferencesService.saveValue('user', user.toString());
+      // await SharedPreferencesService.saveValue('user_email', user);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Navigation()),
@@ -216,5 +254,7 @@ class _SignupScreenState extends State<SignupScreen> {
     } else {
       print("Some Error Happened");
     }
+     */
   }
 }
+

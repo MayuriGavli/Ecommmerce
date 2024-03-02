@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, required String title});
 
   @override
   State<HomePage> createState() => HomepageState();
@@ -53,7 +53,6 @@ class HomepageState extends State<HomePage> {
     );
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0.1,
         title: const Text("SHOPPING APP"),
@@ -274,7 +273,7 @@ class TProductCardVertical extends StatelessWidget {
         'price': "\$300.00",
         'image': 'images/products/top.png',
         'discount': '30%',
-        'isFavorite': true,
+        'isFavorite': false,
       },
       {
         'name': 'White Lehnaga',
@@ -283,7 +282,7 @@ class TProductCardVertical extends StatelessWidget {
         'price': "\$500.00",
         'image': 'images/products/LEHNAGA.png',
         'discount': '10%',
-        'isFavorite': true,
+        'isFavorite': false,
       },
       {
         'name': 'White Shirt',
@@ -292,7 +291,7 @@ class TProductCardVertical extends StatelessWidget {
         'price': "\$500.00",
         'image': 'images/products/longskirt.png',
         'discount': '50%',
-        'isFavorite': true,
+        'isFavorite': false,
       },
       {
         'name': 'Sadi',
@@ -301,7 +300,7 @@ class TProductCardVertical extends StatelessWidget {
         'price': "\$500.00",
         'image': 'images/products/sadi.png',
         'discount': '30%',
-        'isFavorite': true,
+        'isFavorite': false,
       },
       {
         'name': 'JumpSuit',
@@ -310,7 +309,7 @@ class TProductCardVertical extends StatelessWidget {
         'price': "\$500.00",
         'image': 'images/products/jumsuit.png',
         'discount': '10%',
-        'isFavorite': true,
+        'isFavorite': false,
       },
       {
         'name': 'Anarkali',
@@ -319,7 +318,7 @@ class TProductCardVertical extends StatelessWidget {
         'price': "\$500.00",
         'image': 'images/products/anarkali.png',
         'discount': '20%',
-        'isFavorite': true,
+        'isFavorite': false,
       },
     ];
     return  GestureDetector(
@@ -348,7 +347,7 @@ class TProductCardVertical extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => DetailProductScreen()),
+                            builder: (context) => DetailProductsScreen()),
                       );
                     },
                     imageUrl: items[index]['image'].toString(),

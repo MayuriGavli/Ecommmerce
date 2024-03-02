@@ -17,7 +17,9 @@ class _NavigationState extends State<Navigation> {
   int obj = 9;
 
   List<Widget> screen = [
-    HomePage(),
+    HomePage(
+      title: "",
+    ),
     FavoriteScreen(),
     OrderScreen(),
     ProfileScreen()

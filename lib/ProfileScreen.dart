@@ -1,10 +1,16 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commmerce1/EditProfile.dart';
 import 'package:e_commmerce1/LoginScreen.dart';
+import 'package:e_commmerce1/Models/UserModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:quickalert/quickalert.dart';
 
-import 'Providers/SharedPreferencesService.dart';
+// import 'Providers/SharedPreferencesService.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -14,17 +20,24 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class ProfileScreenState extends State<ProfileScreen> {
+  File? _selectedImage;
+
   String _user_email = '';
+
+  void showAlert() {
+    QuickAlert.show(context: context, type: QuickAlertType.confirm);
+  }
 
   @override
   void initState() {
     super.initState();
-    _getUser();
+    // _getUser();
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         elevation: 0.1,
         title: const Text("Profile"),
         centerTitle: true,
@@ -33,7 +46,21 @@ class ProfileScreenState extends State<ProfileScreen> {
               padding: EdgeInsets.only(right: 20, left: 8, top: 8, bottom: 8)),
         ],
       ),
-      body: SingleChildScrollView(
+      body:
+          // StreamBuilder<List<User>>(
+          //   stream: getAllUserData(),
+          //   builder: (context,snapshot){
+          //     if(snapshot.hasData){
+          //       final users = snapshot.data!;
+          //
+          //       return ListView(
+          //         children: users.map(buildUser).toList(),
+          //       )
+          //     }
+          //   },
+          //
+          // ),
+          SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20.0),
           child: Column(
@@ -42,15 +69,37 @@ class ProfileScreenState extends State<ProfileScreen> {
                 width: double.infinity,
                 child: Column(
                   children: [
-                    SizedBox(
-                      width: 120,
-                      height: 120,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: Image(
-                            image: AssetImage("images/logo/pro.png"),
-                          )),
+                    Stack(
+                      children: [
+                        _selectedImage != null
+                            ? CircleAvatar(
+                                radius: 65,
+                                backgroundImage:
+                                    (Image.file(_selectedImage!)).image)
+                            : CircleAvatar(
+                                radius: 65,
+                                backgroundImage:
+                                    Image.asset('images/logo/pro.png').image,
+                              )
+                      ],
                     ),
+
+                    // SizedBox(
+                    //   width: 120,
+                    //   height: 120,
+                    //   child: ClipRRect(
+                    //       borderRadius: BorderRadius.circular(300),
+                    //       child: Image(
+                    //         image: AssetImage("images/logo/pro.png"),
+                    //       )),
+                    // ),
+                    // // _selectedImage != null ? Image.file(_selectedImage!) : const Text("Please Select an Image"),
+                    // _selectedImage != null ? CircleAvatar(
+                    //     radius: 56,
+                    //     backgroundImage: Image.file(
+                    //       File(_selectedImage),).image)
+                    //     : const Text("Please Select an Image"),
+
                     const SizedBox(height: 10.0),
                     TextButton(
                         onPressed: () {
@@ -102,7 +151,6 @@ class ProfileScreenState extends State<ProfileScreen> {
                 width: double.infinity,
                 child: OutlinedButton(
                   onPressed: () {
-                    //log out
                     showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
@@ -116,18 +164,18 @@ class ProfileScreenState extends State<ProfileScreen> {
                                 onPressed: () {
                                   FirebaseAuth.instance.signOut();
                                   Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            LoginScreen()),
-                                  );
-                                },
-                                child: Text("Yes"))
-                          ],
-                          title: Text("Logging Out"),
-                          contentPadding: EdgeInsets.all(20.0),
-                          content: Text("Are You Sure?"),
-                        ));
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoginScreen()),
+                                      );
+                                    },
+                                    child: Text("Yes"))
+                              ],
+                              title: Text("Logging Out"),
+                              contentPadding: EdgeInsets.all(20.0),
+                              content: Text(" Are You Sure?"),
+                            ));
                   },
                   child: Text("Log Out"),
                 ),
@@ -139,9 +187,23 @@ class ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Future _pickImageFromGallery() async {
+    final returnedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    setState(() {
+      _selectedImage = File(returnedImage!.path);
+    });
+  }
+
+  Stream<List<UserModel>> getAllUserData() => FirebaseFirestore.instance
+      .collection('User')
+      .snapshots()
+      .map((snapshots) =>
+          snapshots.docs.map((doc) => UserModel.fromJson(doc.data())).toList());
+
   Widget bottomSheet() {
     return Container(
-      height: 100.0,
+      height: 140.0,
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -160,22 +222,25 @@ class ProfileScreenState extends State<ProfileScreen> {
                 icon: Icon(Iconsax.camera),
                 label: Text("Camera")),
             TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  _pickImageFromGallery();
+                },
                 icon: Icon(Iconsax.gallery),
                 label: Text("Gallery")),
           ],
-        )
+        ),
+        // _selectedImage != null ? Image.file(_selectedImage!) : const Text("Please Select an Image")
       ]),
     );
   }
 
-  void _getUser() async {
-    String? userEmail =
-        await SharedPreferencesService.loadStoredValue('user_email');
-    setState(() {
-      _user_email = userEmail!;
-    });
-  }
+// void _getUser() async {
+//   String? userEmail =
+//       await SharedPreferencesService.loadStoredValue('user_email');
+//   setState(() {
+//     _user_email = userEmail!;
+//   });
+// }
 }
 
 class CircularImage extends StatelessWidget {

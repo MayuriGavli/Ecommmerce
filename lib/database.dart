@@ -1,3 +1,5 @@
+
+
 // // import 'package:path/path.dart';
 // // import 'package:sqflite/sqflite.dart';
 // //
@@ -26,5 +28,12 @@
 //       },
 //       version: 1,
 //     );
+//   }
+// }
+//
+// class DatabaseMethods{
+//   Future addUserdetails(
+//       Map<String,dynamic> employeeInfoMap ,String id)async{
+//     return await FirebaseFirestore.instance.collection("User").doc(id).set(employeeInfoMap);
 //   }
 // }

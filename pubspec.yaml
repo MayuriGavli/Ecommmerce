@@ -27,7 +27,15 @@ dependencies:
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.4
   cloud_firestore: ^4.15.5
-  shared_preferences: ^2.2.2
+  firebase_storage: ^11.6.7
+  get: ^4.6.6
+  fluttertoast: ^8.2.4
+  google_sign_in: ^6.2.1
+  sign_in_button: ^3.0.0
+  image_picker: ^1.0.7
+  quickalert: ^1.0.2
+
+#  shared_preferences: ^2.2.2
 #  sqflite: ^2.0.0
 #  path: ^1.8.0
 #  firebase_core: ^2.25.4
@@ -67,6 +75,7 @@ flutter:
     - images/logo/logo_1.png
     - images/logo/pro.png
     - images/products/sale.png
+    - images/logo/ggo.png
     - images/products/sale2.png
     - images/products/sale3.png
     - images/products/longskirt.png

@@ -15,6 +15,7 @@ class FavoriteScreenState extends State<FavoriteScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         elevation: 0.1,
         title: const Text("FAVOURITE"),
         // centerTitle: true,

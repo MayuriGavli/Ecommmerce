@@ -1,269 +1,252 @@
-// import 'package:flutter/material.dart';
-//
-// class DetailProductScreen extends StatefulWidget {
-//   const DetailProductScreen({super.key});
-//
-//   @override
-//   State<DetailProductScreen> createState() => _DetailProductScreenState();
-// }
-//
-// class _DetailProductScreenState extends State<DetailProductScreen> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold();
-//   }
-// }
-
+import 'package:e_commmerce1/BuyNow.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iconsax/iconsax.dart';
 
-class DetailProductScreen extends StatefulWidget {
-  const DetailProductScreen({super.key});
-
-  @override
-  DetailProductScreenState createState() => DetailProductScreenState();
-}
-
-class DetailProductScreenState extends State<DetailProductScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final _ProductnameController = TextEditingController();
-  final _CompanynameController = TextEditingController();
-  final _TagController = TextEditingController();
-  final _PriceController = TextEditingController();
-
-  bool _passwordVisible = false;
-  bool _agreedToTerms = false;
+class DetailProductsScreen extends StatelessWidget {
+  const DetailProductsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.1,
-        title: const Text("Add Product"),
-        leading: IconButton(
-          onPressed: () {},
-          icon: IconButton(
-            icon: Icon(Iconsax.arrow_left),
-            onPressed: () {
-              Navigator.pop(context);
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => Navigation()),
-              // );
-            },
-          ),
-        ),
-        // centerTitle: true,
-
-        actions: const <Widget>[
-          Padding(
-              padding: EdgeInsets.only(right: 8, left: 8, top: 8, bottom: 8)),
-        ],
-      ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(
-              top: 40.0, left: 20.0, bottom: 24.0, right: 24.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    SizedBox(height: 1),
-                  ],
-                ),
-                const SizedBox(height: 20.0),
-                Column(
-                  children: [
-                    //Company Name
-                    TextFormField(
-                      controller: _CompanynameController,
-                      decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.person),
-                          border: OutlineInputBorder(),
-                          labelText: "Company Name"),
-                      validator: (name) {
-                        if (name!.isEmpty) {
-                          return 'Enter Valid Company Name';
-                        }
-                        return null;
-                      },
+        child: Column(
+          children: [
+            TCurvedWidget(
+              child: Container(
+                child: Stack(children: [
+                  const SizedBox(
+                    height: 400,
+                    child: Padding(
+                        padding: EdgeInsets.fromLTRB(15, 30, 15, 17),
+                        child: Center(
+                          child: Image(
+                              image: AssetImage("images/products/sadi.png")),
+                        )),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        right: 24.0, left: 24.0, bottom: 24.0, top: 420),
+                    child: Column(
+                      children: [
+                        const Row(
+                          children: [
+                            // 5 star
+                            Row(
+                              children: [
+                                Icon(Iconsax.star5,
+                                    color: Colors.amber, size: 25),
+                                SizedBox(height: 16.0),
+                                Text.rich(TextSpan(children: [
+                                  TextSpan(
+                                      text: '  5.0',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                      )),
+                                ]))
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Troundedcontainer(
+                              radius: 12,
+                              backgroundColor: Colors.yellow,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: Text(
+                                '35%',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Row(
+                              children: [
+                                Text(
+                                  '\$500',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+
+                        Row(
+                          children: [
+                            Text(
+                              'Sari',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontFamily: 'RobotoMono',
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+
+                        const Row(
+                          children: [
+                            Text(
+                              'Parampara',
+                              style: TextStyle(
+                                  fontFamily: 'RobotoMono',
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 17,
+                                  color: Colors.black),
+                            ),
+                            SizedBox(width: 4),
+                            Icon(
+                              Iconsax.verify5,
+                              color: Colors.blue,
+                              size: 16,
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 16.0),
+
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              //Check if the form is valid and terms are agreed
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BuyNowScreen()),
+                              );
+                            },
+                            child: const Text("BUY NOW"),
+                          ),
+                        ),
+
+                        const SizedBox(height: 16.0),
+
+                        //create new account
+                        SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              Fluttertoast.showToast(
+                                  msg: "Product is Added To Card",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 2,
+                                  backgroundColor: Colors.blue,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            },
+                            child: Text("Add To Cart"),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 16.0),
-
-                    //Product Name
-                    TextFormField(
-                      controller: _ProductnameController,
-                      decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.shopping_cart_checkout),
-                          border: OutlineInputBorder(),
-                          labelText: "Product Name"),
-                      validator: (name) {
-                        if (name!.isEmpty) {
-                          return 'Enter Valid Product Name';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16.0),
-
-                    //Sale Tag
-                    TextFormField(
-                      controller: _TagController,
-                      decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.discount),
-                          border: OutlineInputBorder(),
-                          labelText: "Discount"),
-                      keyboardType: TextInputType.phone,
-                      validator: (phone) {
-                        if (phone!.isEmpty) {
-                          return 'Enter Valid Sale Tag';
-                        } else if (!RegExp(r'^[0-9]{2}%').hasMatch(phone)) {
-                          return 'Enter a valid Sale Tag';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16.0),
-
-                    //Price
-                    TextFormField(
-                      controller: _PriceController,
-                      decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.currency_rupee),
-                          border: OutlineInputBorder(),
-                          labelText: "Price"),
-                      validator: (name) {
-                        if (name!.isEmpty) {
-                          return 'Enter Valid Price';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16.0),
-                    TextButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                              context: context,
-                              builder: ((builder) => bottomSheet()));
-                        },
-                        child: Text("Upload Image")),
-
-                    // //Image
-                    // TextFormField(
-                    //   controller: _nameController,
-                    //   decoration: const InputDecoration(
-                    //       prefixIcon: Icon(Icons.person),
-                    //       border: OutlineInputBorder(),
-                    //       labelText: "Price"),
-                    //   validator: (name) {
-                    //     if (name!.isEmpty) {
-                    //       return 'Enter Valid Price';
-                    //     }
-                    //     return null;
-                    //   },
-                    // ),
-                    // const SizedBox(height: 16.0),
-
-                    const SizedBox(height: 16.0),
-
-                    //create new account
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Check if the form is valid and terms are agreed
-                          if (_formKey.currentState!.validate()) {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => HomePage()),
-                            // );
-                            // Fluttertoast.showToast(
-                            //     msg: "This is Center Short Toast",
-                            //     toastLength: Toast.LENGTH_SHORT,
-                            //     gravity: ToastGravity.CENTER,
-                            //     timeInSecForIosWeb: 1,
-                            //     backgroundColor: Colors.red,
-                            //     textColor: Colors.white,
-                            //     fontSize: 16.0
-                            // );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text("Product Added Successfully"),
-                            ));
-                            _submitForm();
-                          }
-                        },
-                        child: const Text("Save"),
-                      ),
-                    ),
-                    const SizedBox(height: 16.0),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                        onPressed: () {
-                          // Navigate to the SignupScreen
-                          Navigator.pop(context);
-                        },
-                        child: Text("Cancel"),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget bottomSheet() {
-    return Container(
-      height: 100.0,
-      width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 20,
-      ),
-      child: Column(children: <Widget>[
-        const Text("Choose Profile Photo", style: TextStyle(fontSize: 20.0)),
-        const SizedBox(
-          height: 20,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextButton.icon(
-                onPressed: () {},
-                icon: Icon(Iconsax.camera),
-                label: Text("Camera")),
-            TextButton.icon(
-                onPressed: () {},
-                icon: Icon(Iconsax.gallery),
-                label: Text("Gallery")),
+                  )
+                ]),
+              ),
+            )
           ],
-        )
-      ]),
+        ),
+      ),
     );
   }
 
-  void _submitForm() {
-    // Perform the form submission logic here
-    String name = _ProductnameController.text;
-    String email = _CompanynameController.text;
-    String phone = _TagController.text;
-    String password = _PriceController.text;
+  Future _displayBottomSheet(BuildContext context) {
+    return showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.blue,
+        isDismissible: false,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
+        builder: (context) => Container(
+              height: 200,
+            ));
+  }
+}
 
-    // For demonstration purposes, just print the form data
-    print('Name: $name');
-    print('Email: $email');
-    print('Phone: $phone');
-    print('Password: $password');
+// class DetailProductScreeen extends StatefulWidget {
+//   const DetailProductScreeen({super.key});
+//
+//   @override
+//   State<DetailProductScreeen> createState() => _DetailProductScreeenState();
+// }
 
-    // Add your logic to handle the form submission
+// class _DetailProductScreeenState extends State<DetailProductScreeen> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Scaffold(
+//       body: SingleChildScrollView(
+//         child: Column(
+//           children: [
+//             TCurvedWidget(child: Container())
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+class TCurvedWidget extends StatelessWidget {
+  const TCurvedWidget({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipPath(
+      child: child,
+    );
+  }
+}
+
+class Troundedcontainer extends StatelessWidget {
+  const Troundedcontainer(
+      {super.key,
+      this.child,
+      this.width,
+      this.height,
+      this.margin,
+      this.padding,
+      this.showBorder = false,
+      this.radius = 16.0,
+      this.backgroundColor = Colors.white30,
+      this.borderColor = Colors.amber});
+
+  final double? width;
+  final double? height;
+  final double radius;
+  final Widget? child;
+  final bool showBorder;
+  final Color borderColor;
+  final Color backgroundColor;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      padding: padding,
+      margin: margin,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(radius),
+        border: showBorder ? Border.all(color: borderColor) : null,
+      ),
+      child: child,
+    );
   }
 }

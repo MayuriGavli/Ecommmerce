@@ -4,24 +4,23 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commmerce1/Models/ProductDetailsModel.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:quickalert/quickalert.dart';
 
-class AddProductScreen extends StatefulWidget {
-  const AddProductScreen({super.key});
+class BuyNowScreen extends StatefulWidget {
+  const BuyNowScreen({super.key});
 
   @override
-  AddProductScreenState createState() => AddProductScreenState();
+  BuyNowScreenState createState() => BuyNowScreenState();
 }
 
-class AddProductScreenState extends State<AddProductScreen> {
+class BuyNowScreenState extends State<BuyNowScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final _ProductnameController = TextEditingController();
-  final _CompanynameController = TextEditingController();
-  final _DiscountController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _ShippingAddressController = TextEditingController();
+  final _PaymentMethodController = TextEditingController();
   final _PriceController = TextEditingController();
 
   bool _passwordVisible = false;
@@ -32,12 +31,20 @@ class AddProductScreenState extends State<AddProductScreen> {
   File? _selectedImage;
   File? _nameImageName;
 
+  void showAlert() {
+    QuickAlert.show(
+        context: context,
+        type: QuickAlertType.success,
+        text: "Order Booked Successfully");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         elevation: 0.1,
-        title: const Text("Add Product"),
+        title: const Text("Payment Screen"),
         leading: IconButton(
           onPressed: () {},
           icon: IconButton(
@@ -75,55 +82,57 @@ class AddProductScreenState extends State<AddProductScreen> {
                 const SizedBox(height: 20.0),
                 Column(
                   children: [
-                    //Company Name
+                    //shipping address
                     TextFormField(
-                      controller: _CompanynameController,
+                      controller: _ShippingAddressController,
                       decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.person),
                           border: OutlineInputBorder(),
-                          labelText: "Company Name"),
+                          labelText: "Shipping Address"),
                       validator: (name) {
                         if (name!.isEmpty) {
-                          return 'Enter Valid Company Name';
+                          return 'Enter Valid Shipping Address';
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 16.0),
 
-                    //Product Name
+                    //phone number
                     TextFormField(
-                      controller: _ProductnameController,
+                      controller: _phoneController,
                       decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.shopping_cart_checkout),
+                          prefixIcon: Icon(Icons.phone),
                           border: OutlineInputBorder(),
-                          labelText: "Product Name"),
-                      validator: (name) {
-                        if (name!.isEmpty) {
-                          return 'Enter Valid Product Name';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16.0),
-
-                    //Sale Tag
-                    TextFormField(
-                      controller: _DiscountController,
-                      decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.discount),
-                          border: OutlineInputBorder(),
-                          labelText: "Discount"),
+                          labelText: "Phone Number"),
                       keyboardType: TextInputType.phone,
                       validator: (phone) {
                         if (phone!.isEmpty) {
-                          return 'Enter Valid Sale Tag';
-                        } else if (!RegExp(r'^[0-9]{2}%').hasMatch(phone)) {
-                          return 'Enter a valid Sale Tag';
+                          return 'Enter Valid Phone Number';
+                        } else if (!RegExp(r'^[0-9]{10}$').hasMatch(phone)) {
+                          return 'Enter a valid 10-digit Phone Number';
                         }
                         return null;
                       },
                     ),
+                    const SizedBox(height: 16.0),
+
+                    //payment method
+
+                    TextFormField(
+                      controller: _PaymentMethodController,
+                      decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.payment),
+                          border: OutlineInputBorder(),
+                          labelText: "Payment Method"),
+                      validator: (name) {
+                        if (name!.isEmpty) {
+                          return 'Enter Valid Payment Method';
+                        }
+                        return null;
+                      },
+                    ),
+
                     const SizedBox(height: 16.0),
 
                     //Price
@@ -141,31 +150,6 @@ class AddProductScreenState extends State<AddProductScreen> {
                       },
                     ),
                     const SizedBox(height: 16.0),
-                    Stack(
-                      children: [
-                        _selectedImage != null
-                            ? CircleAvatar(
-                                radius: 65,
-                                backgroundImage:
-                                    (Image.file(_selectedImage!)).image)
-                            : CircleAvatar(
-                                radius: 65,
-                                backgroundImage:
-                                    Image.asset('images/logo/pro.png').image,
-                              )
-                        // _selectedImage != null ? CircleAvatar(radius: 64,backgroundImage: (Image.file(_selectedImage!)).image) : CircleAvatar(backgroundImage: (Image.file(File('/Users/dipakgavali/Library/Developer/CoreSimulator/Devices/54D06B67-CD1F-4491-BA66-FB864C6C5A91/data/Containers/Data/Application/652270BB-6C0B-4D89-B64C-F19A8AAF6122/tmp/image_picker_C75E13AA-6BA8-49F9-905A-19C79953EC38-28476-00000057FBA3DD3D.jpg'))).image,)
-                      ],
-                    ),
-                    const SizedBox(height: 16.0),
-                    TextButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                              context: context,
-                              builder: ((builder) => bottomSheet()));
-                        },
-                        child: Text("Upload Image")),
-
-                    const SizedBox(height: 16.0),
 
                     //create new account
                     SizedBox(
@@ -175,14 +159,7 @@ class AddProductScreenState extends State<AddProductScreen> {
                           // Check if the form is valid and terms are agreed
                           if (_formKey.currentState!.validate()) {
                             _AddProduct();
-                            Fluttertoast.showToast(
-                                msg: "Product Added Successfully",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 2,
-                                backgroundColor: Colors.blue,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
+                            showAlert();
                             // // ScaffoldMessenger.of(context)
                             // //     .showSnackBar(const SnackBar(
                             // //   content: Text("Product Added Successfully"),
@@ -190,7 +167,7 @@ class AddProductScreenState extends State<AddProductScreen> {
                             // _submitForm();
                           }
                         },
-                        child: const Text("Save"),
+                        child: const Text("Success"),
                       ),
                     ),
                     const SizedBox(height: 16.0),
@@ -215,9 +192,10 @@ class AddProductScreenState extends State<AddProductScreen> {
   }
 
   void _AddProduct() async {
-    String ProductName = _ProductnameController.text;
-    String CompanyName = _CompanynameController.text;
-    String Discount = _DiscountController.text;
+    String ProductName = _phoneController
+        .text; //here ypu have to change name and have to create new user model
+    String CompanyName = _ShippingAddressController.text;
+    String Discount = _PaymentMethodController.text;
     String ProductPrice = _PriceController.text;
 
     //new Code of HR
@@ -256,71 +234,19 @@ class AddProductScreenState extends State<AddProductScreen> {
     });
   }
 
-  Widget bottomSheet() {
-    return Container(
-      height: 140.0,
-      width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 20,
-      ),
-      child: Column(children: <Widget>[
-        const Text("Choose Profile Photo", style: TextStyle(fontSize: 20.0)),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextButton.icon(
-                onPressed: () {
-                  ImagePicker imagePicker = ImagePicker();
-                  imagePicker.pickImage(source: ImageSource.camera);
-                },
-                icon: Icon(Iconsax.camera),
-                label: Text("Camera")),
-            TextButton.icon(
-                onPressed: () async {
-                  _pickImageFromGallery();
-
-                  Reference referenceRoot = FirebaseStorage.instance.ref();
-                  Reference referenceDirImage = referenceRoot.child("Product");
-
-                  if (File == null) return;
-
-                  String UniqueFilename =
-                      DateTime.now().microsecondsSinceEpoch.toString();
-
-                  Reference referenceImageToUpload =
-                      referenceDirImage.child('${UniqueFilename}');
-
-                  try {
-                    await referenceImageToUpload.putFile(_selectedImage!);
-                    imageURL = await referenceImageToUpload.getDownloadURL();
-                  } catch (error) {}
-                },
-                icon: Icon(Iconsax.gallery),
-                label: Text("Gallery")),
-          ],
-        ),
-      ]),
-    );
-  }
-
-  void _submitForm() {
-    // Perform the form submission logic here
-    String name = _ProductnameController.text;
-    String email = _CompanynameController.text;
-    String phone = _DiscountController.text;
-    String password = _PriceController.text;
-
-    // For demonstration purposes, just print the form data
-    print('Name: $name');
-    print('Email: $email');
-    print('Phone: $phone');
-    print('Password: $password');
-
-    // Add your logic to handle the form submission
-  }
+// void _submitForm() {
+//   // Perform the form submission logic here
+//   String name = _ProductnameController.text;
+//   String email = _CompanynameController.text;
+//   String phone = _DiscountController.text;
+//   String password = _PriceController.text;
+//
+//   // For demonstration purposes, just print the form data
+//   print('Name: $name');
+//   print('Email: $email');
+//   print('Phone: $phone');
+//   print('Password: $password');
+//
+//   // Add your logic to handle the form submission
+// }
 }
-
