@@ -58,7 +58,6 @@ class UserModel {
         .where("userEmail", isEqualTo: email)
         .get();
 
-    // var dataWithUserModel = UserModel(userName: '', userEmail: '', userPassword: '', userPhoneNo: '');
     if (userTableObject.docs.length > 0) {
       var userData =
           userTableObject.docs.map((e) => UserModel.fromSnapshot(e)).single;
@@ -72,5 +71,12 @@ class UserModel {
       return UserModel(
           userName: '', userEmail: '', userPassword: '', userPhoneNo: '');
     }
+  }
+
+  static Future<void> updateUserRecord(UserModel editedUserData) async {
+    final userTableObject = await FirebaseFirestore.instance
+        .collection('User')
+        .doc(editedUserData.id)
+        .update(editedUserData.toJson());
   }
 }

@@ -1,9 +1,14 @@
-import 'package:e_commmerce1/AddProductScreen.dart';
+import 'package:e_commmerce1/AdminOrderScreen.dart';
 import 'package:e_commmerce1/EditProductScreen.dart';
+import 'package:e_commmerce1/ManageScreen.dart';
 import 'package:e_commmerce1/Models/ProductDetailsModel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iconsax/iconsax.dart';
+
+import 'LoginScreen.dart';
+import 'Providers/SharedPreferencesService.dart';
 
 // import '../db/category.dart';
 // import '../db/brand.dart';
@@ -32,288 +37,203 @@ class _AdminState extends State<Admin> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Row(
+          backgroundColor: Colors.blue,
+          elevation: 0.1,
+          title: const Text("ADMIN PANEL"),
+          centerTitle: true,
+          actions: const <Widget>[
+            Padding(
+                padding:
+                    EdgeInsets.only(right: 20, left: 8, top: 8, bottom: 8)),
+          ],
+        ),
+        drawer: Drawer(
+          child: ListView(
             children: <Widget>[
-              Expanded(
-                  child: TextButton.icon(
-                      onPressed: () {
-                        setState(() => _selectedPage = Page.dashboard);
-                        _loadScreen();
-                      },
-                      icon: Icon(
-                        Icons.dashboard,
-                        color: _selectedPage == Page.dashboard
-                            ? active
-                            : notActive,
-                      ),
-                      label: Text('Dashboard'))),
-              Expanded(
-                  child: TextButton.icon(
-                      onPressed: () {
-                        setState(() => _selectedPage = Page.manage);
-                        // var AllProductData = ProductDetailsModel.getAllProductDetail();
-                      },
-                      icon: Icon(
-                        Icons.sort,
-                        color:
-                            _selectedPage == Page.manage ? active : notActive,
-                      ),
-                      label: Text('Manage'))),
+              UserAccountsDrawerHeader(
+                  accountName: const Text("Mayuri Gavli"),
+                  accountEmail: const Text("mayuri28@gmail.com"),
+                  currentAccountPicture: GestureDetector(
+                    child: const CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Icon(Icons.person),
+                    ),
+                  )),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ManageScreen()),
+                  );
+                },
+                child: const ListTile(
+                  title: Text("Manage"),
+                  leading: Icon(Icons.account_box, color: Colors.blue),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AdminOrderScreen()),
+                  );
+                },
+                child: const ListTile(
+                  title: Text("Orders"),
+                  leading: Icon(Icons.shopping_bag, color: Colors.blue),
+                ),
+              ),
+              const Divider(),
+              InkWell(
+                onTap: () {
+                  FirebaseAuth.instance.signOut();
+                  sharedPrefrenceInstance.saveValue(
+                      'userData', ''); //Logout Code
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                  );
+                },
+                child: const ListTile(
+                  title: Text("LogOut"),
+                  leading: Icon(Icons.logout, color: Colors.blue),
+                ),
+              ),
             ],
           ),
-          elevation: 0.0,
-          backgroundColor: Colors.white,
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AddProductScreen()),
-            );
-          },
-          backgroundColor: Colors.blue,
-          child: Icon(Icons.add),
-        ),
-        body: _loadScreen());
+        body: _load());
   }
 
-  Widget _loadScreen() {
-    switch (_selectedPage) {
-      case Page.dashboard:
-        return Column(
-          children: <Widget>[
-            ListTile(
-              subtitle: TextButton.icon(
-                onPressed: null,
-                icon: const Icon(
-                  Icons.currency_rupee,
-                  size: 30.0,
-                  color: Colors.green,
-                ),
-                label: const Text('12,000',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 30.0, color: Colors.green)),
-              ),
-              title: const Text(
-                'Revenue',
+  Widget _load() {
+    return Column(
+      children: <Widget>[
+        ListTile(
+          subtitle: TextButton.icon(
+            onPressed: null,
+            icon: const Icon(
+              Icons.currency_rupee,
+              size: 30.0,
+              color: Colors.green,
+            ),
+            label: const Text('12,000',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 24.0, color: Colors.black),
+                style: TextStyle(fontSize: 30.0, color: Colors.green)),
+          ),
+          title: const Text(
+            'Revenue',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 24.0, color: Colors.black),
+          ),
+        ),
+        Expanded(
+          child: GridView(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Card(
+                  child: ListTile(
+                      title: TextButton.icon(
+                          onPressed: null,
+                          icon: Icon(Icons.person_2_rounded),
+                          label: Text("Users",
+                              style: TextStyle(color: Colors.black))),
+                      subtitle: const Text(
+                        '7',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.blue, fontSize: 60.0),
+                      )),
+                ),
               ),
-            ),
-            Expanded(
-              child: GridView(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Card(
-                      child: ListTile(
-                          title: TextButton.icon(
-                              onPressed: null,
-                              icon: Icon(Icons.person_2_rounded),
-                              label: Text("Users",
-                                  style: TextStyle(color: Colors.black))),
-                          subtitle: const Text(
-                            '7',
-                            textAlign: TextAlign.center,
-                            style:
-                                TextStyle(color: Colors.blue, fontSize: 60.0),
-                          )),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Card(
-                      child: ListTile(
-                          title: TextButton.icon(
-                              onPressed: null,
-                              icon: Icon(Icons.category_rounded),
-                              label: Text("Category",
-                                  style: TextStyle(color: Colors.black))),
-                          subtitle: const Text(
-                            '23',
-                            textAlign: TextAlign.center,
-                            style:
-                                TextStyle(color: Colors.blue, fontSize: 60.0),
-                          )),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Card(
-                      child: ListTile(
-                          title: TextButton.icon(
-                              onPressed: null,
-                              icon: Icon(Icons.track_changes),
-                              label: Text("Product",
-                                  style: TextStyle(color: Colors.black))),
-                          subtitle: const Text(
-                            '120',
-                            textAlign: TextAlign.center,
-                            style:
-                                TextStyle(color: Colors.blue, fontSize: 60.0),
-                          )),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Card(
-                      child: ListTile(
-                          title: TextButton.icon(
-                              onPressed: null,
-                              icon: Icon(Icons.tag_faces),
-                              label: Text("Sold",
-                                  style: TextStyle(color: Colors.black))),
-                          subtitle: const Text(
-                            '13',
-                            textAlign: TextAlign.center,
-                            style:
-                                TextStyle(color: Colors.blue, fontSize: 60.0),
-                          )),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Card(
-                      child: ListTile(
-                          title: TextButton.icon(
-                              onPressed: null,
-                              icon: Icon(Icons.shopping_cart),
-                              label: Text("Orders",
-                                  style: TextStyle(color: Colors.black))),
-                          subtitle: const Text(
-                            '5',
-                            textAlign: TextAlign.center,
-                            style:
-                                TextStyle(color: Colors.blue, fontSize: 60.0),
-                          )),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Card(
-                      child: ListTile(
-                          title: TextButton.icon(
-                              onPressed: null,
-                              icon: Icon(Icons.close),
-                              label: Text("Return",
-                                  style: TextStyle(color: Colors.black))),
-                          subtitle: const Text(
-                            '0',
-                            textAlign: TextAlign.center,
-                            style:
-                                TextStyle(color: Colors.blue, fontSize: 60.0),
-                          )),
-                    ),
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Card(
+                  child: ListTile(
+                      title: TextButton.icon(
+                          onPressed: null,
+                          icon: Icon(Icons.category_rounded),
+                          label: Text("Category",
+                              style: TextStyle(color: Colors.black))),
+                      subtitle: const Text(
+                        '23',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.blue, fontSize: 60.0),
+                      )),
+                ),
               ),
-            ),
-          ],
-        );
-        break;
-      case Page.manage:
-        return ListView(
-          children: <Widget>[
-            Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16.0),
-                    GridView.builder(
-                      itemCount: 8,
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 10.0,
-                        crossAxisSpacing: 10.0,
-                        mainAxisExtent: 253,
-                      ),
-                      itemBuilder: (_, index) => TProductCardVertical(index),
-                    )
-                  ],
-                )),
-
-            //   ListTile(
-            //     leading: Icon(Icons.add_box),
-            //     title: Text("Add Product"),
-            //     onTap: () {
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(builder: (context) => AddProductScreen()),
-            //       );
-            //     },
-            //   ),
-            //   Divider(),
-            //   ListTile(
-            //     leading: Icon(Icons.edit),
-            //     title: Text("Edit Product"),
-            //     onTap: () {},
-            //   ),
-            //   Divider(),
-            //   ListTile(
-            //     leading: Icon(Icons.delete),
-            //     title: Text("Delete Product"),
-            //     onTap: () {
-            //       // _categoryAlert();
-            //     },
-            //   ),
-            //   Divider(),
-            //   ListTile(
-            //     leading: Icon(Icons.settings_display_rounded),
-            //     title: Text("Display Product"),
-            //     onTap: () {
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(builder: (context) => AddProductScreen()),
-            //       );
-            //     },
-            //   ),
-            //   Divider(),
-            //   ListTile(
-            //     leading: Icon(Icons.add_box),
-            //     title: Text("Add Category"),
-            //     onTap: () {},
-            //   ),
-            //   Divider(),
-            //   ListTile(
-            //     leading: Icon(Icons.edit),
-            //     title: Text("Edit Category"),
-            //     onTap: () {
-            //       // _brandAlert();
-            //     },
-            //   ),
-            //   Divider(),
-            //   ListTile(
-            //     leading: Icon(Icons.delete),
-            //     title: Text("Delete Category"),
-            //     onTap: () {},
-            //   ),
-            //   Divider(),
-            //   ListTile(
-            //     leading: Icon(Icons.settings_display_rounded),
-            //     title: Text("Display Product"),
-            //     onTap: () {
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(builder: (context) => AddProductScreen()),
-            //       );
-            //     },
-            //   ),
-            //   Divider(),
-          ],
-        );
-        break;
-      default:
-        return Container();
-    }
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Card(
+                  child: ListTile(
+                      title: TextButton.icon(
+                          onPressed: null,
+                          icon: Icon(Icons.track_changes),
+                          label: Text("Product",
+                              style: TextStyle(color: Colors.black))),
+                      subtitle: const Text(
+                        '120',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.blue, fontSize: 60.0),
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Card(
+                  child: ListTile(
+                      title: TextButton.icon(
+                          onPressed: null,
+                          icon: Icon(Icons.tag_faces),
+                          label: Text("Sold",
+                              style: TextStyle(color: Colors.black))),
+                      subtitle: const Text(
+                        '13',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.blue, fontSize: 60.0),
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Card(
+                  child: ListTile(
+                      title: TextButton.icon(
+                          onPressed: null,
+                          icon: Icon(Icons.shopping_cart),
+                          label: Text("Orders",
+                              style: TextStyle(color: Colors.black))),
+                      subtitle: const Text(
+                        '5',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.blue, fontSize: 60.0),
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Card(
+                  child: ListTile(
+                      title: TextButton.icon(
+                          onPressed: null,
+                          icon: Icon(Icons.close),
+                          label: Text("Return",
+                              style: TextStyle(color: Colors.black))),
+                      subtitle: const Text(
+                        '0',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.blue, fontSize: 60.0),
+                      )),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
+}
 
 // void _categoryAlert() {
 //   var alert = new AlertDialog(
@@ -382,7 +302,6 @@ class _AdminState extends State<Admin> {
 //
 //   showDialog(context: context, builder: (_) => alert);
 // }
-}
 
 class TProductCardVertical extends StatelessWidget {
   const TProductCardVertical(this.index, {super.key});

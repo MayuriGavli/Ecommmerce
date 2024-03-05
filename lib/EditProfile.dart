@@ -1,5 +1,10 @@
+import 'dart:convert';
+
+import 'package:e_commmerce1/Models/UserModel.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Singleton/AppSingleton.dart';
 
@@ -33,6 +38,7 @@ class EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         elevation: 0.1,
         title: const Text("Edit Profile"),
         leading: IconButton(
@@ -66,7 +72,6 @@ class EditProfileState extends State<EditProfile> {
                   children: [
                     //username
                     TextFormField(
-                      // initialValue: 'fdsdf',
                       controller: _nameController,
                       decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.person),
@@ -93,7 +98,7 @@ class EditProfileState extends State<EditProfile> {
                         if (email!.isEmpty) {
                           return 'Enter Valid Email';
                         } else if (!RegExp(
-                                r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
+                            r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
                             .hasMatch(email)) {
                           return 'Enter a valid Email Address';
                         }
@@ -161,26 +166,7 @@ class EditProfileState extends State<EditProfile> {
                         onPressed: () {
                           // Check if the form is valid and terms are agreed
                           if (_formKey.currentState!.validate()) {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => HomePage()),
-                            // );
-                            // Fluttertoast.showToast(
-                            //     msg: "This is Center Short Toast",
-                            //     toastLength: Toast.LENGTH_SHORT,
-                            //     gravity: ToastGravity.CENTER,
-                            //     timeInSecForIosWeb: 1,
-                            //     backgroundColor: Colors.red,
-                            //     textColor: Colors.white,
-                            //     fontSize: 16.0
-                            // );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text("Profile Updated"),
-                            ));
-
-                            // _submitForm();
+                            _editProfileData();
                           }
                         },
                         child: const Text("Save"),
@@ -208,19 +194,45 @@ class EditProfileState extends State<EditProfile> {
     );
   }
 
-  void _submitForm() {
+  void _editProfileData() async {
     // Perform the form submission logic here
     String name = _nameController.text;
     String email = _emailController.text;
     String phone = _phoneController.text;
     String password = _passwordController.text;
+    String userId = appSingletonInstance.userDataFromSingleton.id;
 
     // For demonstration purposes, just print the form data
+    print('Name: $userId');
     print('Name: $name');
     print('Email: $email');
     print('Phone: $phone');
     print('Password: $password');
 
-    // Add your logic to handle the form submission
+    var editedUserData = UserModel(
+        id: userId,
+        userName: name,
+        userEmail: email,
+        userPassword: password,
+        userPhoneNo: phone);
+    await UserModel.updateUserRecord(editedUserData);
+
+    appSingletonInstance.userDataFromSingleton =
+        editedUserData; //saving data in Global Variable
+    SharedPreferences sharedPreferenceInstance =
+        await SharedPreferences.getInstance(); //Shared preference object
+    String userDataEncodeInJson = jsonEncode(editedUserData); // encoding data
+    sharedPreferenceInstance.setString('userData', userDataEncodeInJson);
+
+    Fluttertoast.showToast(
+        msg: "Profile Update Successfully",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 2,
+        backgroundColor: Colors.blue,
+        textColor: Colors.white,
+        fontSize: 16.0);
+
+    Navigator.pop(context); //Navigate back to profile screen
   }
 }

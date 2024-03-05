@@ -1,15 +1,12 @@
 import 'dart:core';
-// import 'dart:html';
-import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commmerce1/Navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:quickalert/quickalert.dart';
 
-import 'Models/BuyNowDetailsModel.dart';
+import 'Models/OrderModel.dart';
+import 'Singleton/AppSingleton.dart';
 
 class BuyNowScreen extends StatefulWidget {
   const BuyNowScreen({super.key});
@@ -29,11 +26,14 @@ class BuyNowScreenState extends State<BuyNowScreen> {
   bool _agreedToTerms = false;
 
   String imageURL = '';
-
-  File? _selectedImage;
-  File? _nameImageName;
+  var productDetailModelObject = appSingletonInstance.productDetailToEdit;
 
   @override
+  void initState() {
+    _PaymentMethodController.text = 'Cash On Delivery';
+    _PriceController.text = productDetailModelObject.ProductPrice;
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -93,28 +93,12 @@ class BuyNowScreenState extends State<BuyNowScreen> {
                     ),
                     const SizedBox(height: 16.0),
 
-                    //phone number
-                    TextFormField(
-                      controller: _phoneController,
-                      decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.phone),
-                          border: OutlineInputBorder(),
-                          labelText: "Phone Number"),
-                      keyboardType: TextInputType.phone,
-                      validator: (phone) {
-                        if (phone!.isEmpty) {
-                          return 'Enter Valid Phone Number';
-                        } else if (!RegExp(r'^[0-9]{10}$').hasMatch(phone)) {
-                          return 'Enter a valid 10-digit Phone Number';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16.0),
-
                     //payment method
 
                     TextFormField(
+                      // productDetailModelObject.ProductPrice,
+                      enabled: false,
+
                       controller: _PaymentMethodController,
                       decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.payment),
@@ -132,6 +116,7 @@ class BuyNowScreenState extends State<BuyNowScreen> {
 
                     //Price
                     TextFormField(
+                      enabled: false,
                       controller: _PriceController,
                       decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.currency_rupee),
@@ -153,7 +138,7 @@ class BuyNowScreenState extends State<BuyNowScreen> {
                         onPressed: () {
                           // Check if the form is valid and terms are agreed
                           if (_formKey.currentState!.validate()) {
-                            _AddProduct();
+                            _bookProduct();
                             showAlert(context);
                             // // ScaffoldMessenger.of(context)
                             // //     .showSnackBar(const SnackBar(
@@ -206,60 +191,25 @@ class BuyNowScreenState extends State<BuyNowScreen> {
     );
   }
 
-  void _AddProduct() async {
-    String Phone = _phoneController
-        .text; //here ypu have to change name and have to create new user model
-    String ShippingAddress = _ShippingAddressController.text;
-    String PaymentMethod = _PaymentMethodController.text;
-    String ProductPrice = _PriceController.text;
+  void _bookProduct() async {
+    var todayDate = new DateTime.now();
+    String productShippingDate =
+        '${todayDate.day + 1}-${todayDate.month}-${todayDate.year}';
+    String userName = appSingletonInstance.userDataFromSingleton.userName;
+    String userShippingAddress = _ShippingAddressController.text;
+    String userPaymentMethod = _PaymentMethodController.text;
+    String productName = productDetailModelObject.ProductName;
+    String userId = appSingletonInstance.userDataFromSingleton.id;
 
-    //new Code of HR
-    // Harsha - 28-02-24 - Inserted the data into firebase table named as 'User'
-    final productTableObject = FirebaseFirestore.instance
-        .collection('PaymentDetails')
-        .doc(); //get the user table and made object
-    final productData = PaymentDetailsModel(
-        id: productTableObject.id,
-        ShippingAddress: ShippingAddress,
-        phone: Phone,
-        PaymentMethod: PaymentMethod,
-        ProductPrice: ProductPrice);
-    //making an object of user data
-    final jsonData = productData.toJson(); // Converted the userdata into json
-    await productTableObject.set(jsonData).then((obj) {
-      //checking if the data is inserted oor not
-      print("data inserted succesfully");
-      print("=================");
-      print(productTableObject.id);
-      print("=================");
-      // Navigator.of(context).pop();
-    }).catchError((onError) {
-      print(onError);
-    });
+    var orderData = OrderModel(
+        userId: userId,
+        userName: userName,
+        userShippingAddress: userShippingAddress,
+        productName: productName,
+        productShippingDate: productShippingDate);
+
+    OrderModel.addOrderDetail(orderData);
+    print('Data Added Successfully');
   }
 
-  Future _pickImageFromGallery() async {
-    final returnedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    setState(() {
-      _selectedImage = File(returnedImage!.path);
-      _nameImageName = File(returnedImage!.name);
-    });
-  }
-
-// void _submitForm() {
-//   // Perform the form submission logic here
-//   String name = _ProductnameController.text;
-//   String email = _CompanynameController.text;
-//   String phone = _DiscountController.text;
-//   String password = _PriceController.text;
-//
-//   // For demonstration purposes, just print the form data
-//   print('Name: $name');
-//   print('Email: $email');
-//   print('Phone: $phone');
-//   print('Password: $password');
-//
-//   // Add your logic to handle the form submission
-// }
 }

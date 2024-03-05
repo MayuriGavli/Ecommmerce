@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,13 +38,14 @@ class ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _user_name = appSingletonInstance.userDataFromSingleton.userName ?? '';
-    _user_email = appSingletonInstance.userDataFromSingleton.userEmail ?? '';
-    _user_password =
-        appSingletonInstance.userDataFromSingleton.userPassword ?? '';
-    _user_phoneNo =
-        appSingletonInstance.userDataFromSingleton.userPhoneNo ?? '';
-    _user_id = appSingletonInstance.userDataFromSingleton.id ?? '';
+    // _user_name = appSingletonInstance.userDataFromSingleton.userName ?? '';
+    // _user_email = appSingletonInstance.userDataFromSingleton.userEmail ?? '';
+    // _user_password =
+    //     appSingletonInstance.userDataFromSingleton.userPassword ?? '';
+    // _user_phoneNo =
+    //     appSingletonInstance.userDataFromSingleton.userPhoneNo ?? '';
+    // _user_id = appSingletonInstance.userDataFromSingleton.id ?? '';
+    setUserDataInProfileScreen();
   }
 
   Widget build(BuildContext context) {
@@ -59,20 +61,20 @@ class ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
       body:
-          // StreamBuilder<List<User>>(
-          //   stream: getAllUserData(),
-          //   builder: (context,snapshot){
-          //     if(snapshot.hasData){
-          //       final users = snapshot.data!;
-          //
-          //       return ListView(
-          //         children: users.map(buildUser).toList(),
-          //       )
-          //     }
-          //   },
-          //
-          // ),
-          SingleChildScrollView(
+      // StreamBuilder<List<User>>(
+      //   stream: getAllUserData(),
+      //   builder: (context,snapshot){
+      //     if(snapshot.hasData){
+      //       final users = snapshot.data!;
+      //
+      //       return ListView(
+      //         children: users.map(buildUser).toList(),
+      //       )
+      //     }
+      //   },
+      //
+      // ),
+      SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20.0),
           child: Column(
@@ -85,14 +87,14 @@ class ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         _selectedImage != null
                             ? CircleAvatar(
-                                radius: 65,
-                                backgroundImage:
-                                    (Image.file(_selectedImage!)).image)
+                            radius: 65,
+                            backgroundImage:
+                            (Image.file(_selectedImage!)).image)
                             : CircleAvatar(
-                                radius: 65,
-                                backgroundImage:
-                                    Image.asset('images/logo/pro.png').image,
-                              )
+                          radius: 65,
+                          backgroundImage:
+                          Image.asset('images/logo/pro.png').image,
+                        )
                       ],
                     ),
 
@@ -154,9 +156,10 @@ class ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () {
                     //Check if the form is valid and terms are agreed
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => EditProfile()),
-                    );
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfile()))
+                        .then(refreshData);
                   },
                   child: const Text("Edit Profile"),
                 ),
@@ -178,21 +181,21 @@ class ProfileScreenState extends State<ProfileScreen> {
                             TextButton(
                                 onPressed: () {
                                   FirebaseAuth.instance.signOut();
-                                      sharedPrefrenceInstance.saveValue(
-                                          'userData', ''); //Logout Code
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                LoginScreen()),
-                                      );
-                                    },
-                                    child: Text("Yes"))
-                              ],
-                              title: Text("Logging Out"),
-                              contentPadding: EdgeInsets.all(20.0),
-                              content: Text(" Are You Sure?"),
-                            ));
+                                  sharedPrefrenceInstance.saveValue(
+                                      'userData', ''); //Logout Code
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            LoginScreen()),
+                                  );
+                                },
+                                child: Text("Yes"))
+                          ],
+                          title: Text("Logging Out"),
+                          contentPadding: EdgeInsets.all(20.0),
+                          content: Text(" Are You Sure?"),
+                        ));
                   },
                   child: Text("Log Out"),
                 ),
@@ -210,13 +213,14 @@ class ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       _selectedImage = File(returnedImage!.path);
     });
+    if (_selectedImage != null) {}
   }
 
   Stream<List<UserModel>> getAllUserData() => FirebaseFirestore.instance
       .collection('User')
       .snapshots()
       .map((snapshots) =>
-          snapshots.docs.map((doc) => UserModel.fromJson(doc.data())).toList());
+      snapshots.docs.map((doc) => UserModel.fromJson(doc.data())).toList());
 
   Widget bottomSheet() {
     return Container(
@@ -251,26 +255,33 @@ class ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-// void _getUser() async {
-//   String? userEmail =
-//       await SharedPreferencesService.loadStoredValue('user_email');
-//   setState(() {
-//     _user_email = userEmail!;
-//   });
-// }
+  FutureOr refreshData(dynamic value) {
+    print('------------Hiiiiiiiiiii----------------');
+    print(appSingletonInstance.userDataFromSingleton.userEmail);
+    setUserDataInProfileScreen();
+  }
+
+  void setUserDataInProfileScreen() {
+    _user_name = appSingletonInstance.userDataFromSingleton.userName ?? '';
+    _user_email = appSingletonInstance.userDataFromSingleton.userEmail ?? '';
+    _user_password =
+        appSingletonInstance.userDataFromSingleton.userPassword ?? '';
+    _user_phoneNo =
+        appSingletonInstance.userDataFromSingleton.userPhoneNo ?? '';
+    _user_id = appSingletonInstance.userDataFromSingleton.id ?? '';
+  }
 }
 
 class CircularImage extends StatelessWidget {
-  const CircularImage(
-      {super.key,
-      this.width = 56,
-      this.height = 56,
-      this.overlayColor,
-      this.backgroundcolor,
-      required this.image,
-      this.fit,
-      this.padding = 16.0,
-      this.isNetworkingImage = false});
+  const CircularImage({super.key,
+    this.width = 56,
+    this.height = 56,
+    this.overlayColor,
+    this.backgroundcolor,
+    required this.image,
+    this.fit,
+    this.padding = 16.0,
+    this.isNetworkingImage = false});
 
   final BoxFit? fit;
   final String image;
@@ -302,11 +313,10 @@ class CircularImage extends StatelessWidget {
 }
 
 class ProfileMenu extends StatelessWidget {
-  const ProfileMenu(
-      {super.key,
-      required this.onPressed,
-      required this.title,
-      required this.value});
+  const ProfileMenu({super.key,
+    required this.onPressed,
+    required this.title,
+    required this.value});
 
   final VoidCallback onPressed;
   final String title, value;

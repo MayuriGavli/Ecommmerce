@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:firebase_core/firebase_core.dart';
 
+import 'AdminHomeScreen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -38,8 +39,8 @@ void main() async {
         appSingletonInstance.userDataFromSingleton.userEmail ==
             'mrgavli28@gmail.com') {
       //Navigate to Admin Portel
-      // Screen = Admin();
-      Screen = Navigation();
+      Screen = Admin();
+      // Screen = Navigation();
     } else if (appSingletonInstance
         .userDataFromSingleton.userEmail.isNotEmpty) {
       //navigate inside the App

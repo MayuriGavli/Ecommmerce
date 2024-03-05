@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:e_commmerce1/AdminHomeScreen.dart';
 import 'package:e_commmerce1/Models/UserModel.dart';
 import 'package:e_commmerce1/Navigation.dart';
 import 'package:e_commmerce1/Singleton/AppSingleton.dart';
@@ -7,10 +8,10 @@ import 'package:e_commmerce1/usr_auth/firebase_auth_implementation/firebase_auth
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'Providers/SharedPreferencesService.dart';
+import 'Googlelogin.dart';
 import 'SignScreen.dart';
 
 // import 'package:shared_preferences/shared_preferences.dart';
@@ -217,7 +218,7 @@ class LoginScreenState extends State<LoginScreen> {
             ],
           ),
           const SizedBox(height: 27.0),
-          // _googleSignIn()
+          // _googleSignIn(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -227,7 +228,11 @@ class LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(100)),
                 child: IconButton(
                   onPressed: () {
-                    signInWithGoogle();
+                    // signInWithGoogle();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignInDemo()),
+                    );
                   },
                   icon: Image(
                       width: 25,
@@ -244,17 +249,18 @@ class LoginScreenState extends State<LoginScreen> {
 
   //Functions
   //SignUp With Google Function
-  signInWithGoogle() async {
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-    AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-    UserCredential userCredential =
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    print(userCredential.user?.displayName);
-  }
+  // signInWithGoogle() async {
+  //
+  //   GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  //   GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+  //   AuthCredential credential = GoogleAuthProvider.credential(
+  //     accessToken: googleAuth?.accessToken,
+  //     idToken: googleAuth?.idToken,
+  //   );
+  //   UserCredential userCredential =
+  //   await FirebaseAuth.instance.signInWithCredential(credential);
+  //   print(userCredential.user?.displayName);
+  // }
 
   //Login Function
   void _signIn() async {
@@ -278,12 +284,19 @@ class LoginScreenState extends State<LoginScreen> {
       SharedPreferences sharedPreferenceInstance =
           await SharedPreferences.getInstance(); //Shared prefrence object
       String userDataEncodeInJson = jsonEncode(userData); // encoding data
-      sharedPreferenceInstance.setString(
-          'userData', userDataEncodeInJson); //saving data into shared prefrence
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Navigation()),
-      );
+      sharedPreferenceInstance.setString('userData', userDataEncodeInJson);
+      //saving data into shared prefrence
+      if (userData.userEmail == 'mrgavli28@gmail.com') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Admin()),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Navigation()),
+        );
+      }
     }
   }
 }

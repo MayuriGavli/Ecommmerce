@@ -28,6 +28,7 @@ class ProductDetailsModel {
 
   static ProductDetailsModel fromJson(Map<String, dynamic> jsonData) =>
       ProductDetailsModel(
+        id: jsonData['id'],
         ProductName: jsonData['ProductName'],
         CompanyName: jsonData['CompanyName'],
         Discount: jsonData['Discount'],
@@ -39,6 +40,20 @@ class ProductDetailsModel {
       DocumentSnapshot<Map<String, dynamic>> jsonData) {
     final data = jsonData.data()!;
     return ProductDetailsModel(
+      id: data['id'],
+      ProductName: data['ProductName'],
+      CompanyName: data['CompanyName'],
+      Discount: data['Discount'],
+      ProductPrice: data['ProductPrice'],
+      imageURL: jsonData['imageURL'],
+    );
+  }
+
+  factory ProductDetailsModel.fromQueryDocumentSnapShot(
+      QueryDocumentSnapshot<Map<String, dynamic>> jsonData) {
+    final data = jsonData.data()!;
+    return ProductDetailsModel(
+      id: data['id'],
       ProductName: data['ProductName'],
       CompanyName: data['CompanyName'],
       Discount: data['Discount'],
@@ -52,7 +67,7 @@ class ProductDetailsModel {
         await FirebaseFirestore.instance.collection('Product').get();
     final productData = productTableObject.docs
         .map((QueryDocumentSnapshot<Map<String, dynamic>> e) =>
-            ProductDetailsModel.fromJson(e as Map<String, dynamic>))
+            ProductDetailsModel.fromQueryDocumentSnapShot(e))
         .toList();
     if (productData.length > 0) {
       return productData;
@@ -60,4 +75,27 @@ class ProductDetailsModel {
       return [];
     }
   }
+
+  static Future<void> updateProductRecord(
+      ProductDetailsModel editedProductData) async {
+    final productTableObject = await FirebaseFirestore.instance
+        .collection('Product')
+        .doc(editedProductData.id)
+        .update(editedProductData.toJson());
+  }
+
+  static Future<void> deleteProductRecord(
+      ProductDetailsModel editedProductData) async {
+    final productTableObject = await FirebaseFirestore.instance
+        .collection('Product')
+        .doc(editedProductData.id)
+        .delete();
+  }
 }
+
+final ProductDetailsModelInstance = ProductDetailsModel(
+    ProductName: '',
+    CompanyName: '',
+    Discount: '',
+    ProductPrice: '',
+    imageURL: '');

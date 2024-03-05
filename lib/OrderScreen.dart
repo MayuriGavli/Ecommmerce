@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
+import 'Models/OrderModel.dart';
+
 class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
 
@@ -9,8 +11,19 @@ class OrderScreen extends StatefulWidget {
 }
 
 class OrderScreenState extends State<OrderScreen> {
+  var allOrderArray = [
+    OrderModel(
+        id: '',
+        userId: '',
+        userName: '',
+        userShippingAddress: '',
+        productName: '',
+        productShippingDate: '')
+  ];
+
   @override
   Widget build(BuildContext context) {
+    getAllData();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -23,16 +36,38 @@ class OrderScreenState extends State<OrderScreen> {
               padding: EdgeInsets.only(right: 8, left: 8, top: 8, bottom: 8)),
         ],
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: OrderItems(),
-      ),
+      body: OrderItems(allOrderArray),
     );
+  }
+
+  void getAllData() async {
+    var order = await OrderModel.getAllOrderDetail();
+    // order.forEach((element) {
+    //   allOrderArray.add(element);
+    // });
+    allOrderArray = order;
+    print(order.length);
+    print(allOrderArray.length);
   }
 }
 
 class OrderItems extends StatelessWidget {
-  const OrderItems({super.key});
+  OrderItems(this.allOrderArray, {super.key});
+
+  var allOrderArray = [
+    OrderModel(
+        id: '',
+        userId: '',
+        userName: '',
+        userShippingAddress: '',
+        productName: '',
+        productShippingDate: '')
+  ];
+  var todayDate = new DateTime.now();
+  var newCurrentDate = '';
+  var newShipmentDate = '';
+  var newCurrentDate1 = 0;
+  var newShipmentDate1 = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -40,50 +75,116 @@ class OrderItems extends StatelessWidget {
       {
         'orderID': '#0977',
         'Product_Name': 'Crop Top',
-        'Shippment': 'Processing',
+        'Shippment': '',
         'Shippment_value': '01 Feb 2024',
         'Shipping Date': '07 Feb 2024',
       },
       {
         'orderID': '#4322',
         'Product_Name': 'Sundress',
-        'Shippment': 'Processing',
+        'Shippment': '',
         'Shippment_value': '09 Feb 2024',
         'Shipping Date': '15 Feb 2024',
       },
       {
         'orderID': '#7588',
         'Product_Name': 'Anarkali',
-        'Shippment': 'Processing',
+        'Shippment': '',
         'Shippment_value': '3 Feb 2024',
         'Shipping Date': '10 Feb 2024',
       },
       {
         'orderID': '#5699',
         'Product_Name': 'Dungree',
-        'Shippment': 'Delivered',
+        'Shippment': '',
         'Shippment_value': '28 Jan 2024',
         'Shipping Date': '07 Feb 2024',
       },
       {
-        'orderID': '#8766',
-        'Product_Name': 'Gown',
-        'Shippment': 'Delivered',
-        'Shippment_value': '21 Jan 2024',
-        'Shipping Date': '29 Jan 2024',
+        'orderID': '#5699',
+        'Product_Name': 'Dungree',
+        'Shippment': '',
+        'Shippment_value': '28 Jan 2024',
+        'Shipping Date': '07 Feb 2024',
       },
       {
-        'orderID': '#7899',
-        'Product_Name': 'Kurti',
-        'Shippment': 'Delivered',
-        'Shippment_value': '24 Jan 2024',
-        'Shipping Date': '1 Feb 2024',
+        'orderID': '#5699',
+        'Product_Name': 'Dungree',
+        'Shippment': '',
+        'Shippment_value': '28 Jan 2024',
+        'Shipping Date': '07 Feb 2024',
+      },
+      {
+        'orderID': '#5699',
+        'Product_Name': 'Dungree',
+        'Shippment': '',
+        'Shippment_value': '28 Jan 2024',
+        'Shipping Date': '07 Feb 2024',
+      },
+      {
+        'orderID': '#5699',
+        'Product_Name': 'Dungree',
+        'Shippment': '',
+        'Shippment_value': '28 Jan 2024',
+        'Shipping Date': '07 Feb 2024',
+      },
+      {
+        'orderID': '#5699',
+        'Product_Name': 'Dungree',
+        'Shippment': '',
+        'Shippment_value': '28 Jan 2024',
+        'Shipping Date': '07 Feb 2024',
+      },
+      {
+        'orderID': '#5699',
+        'Product_Name': 'Dungree',
+        'Shippment': '',
+        'Shippment_value': '28 Jan 2024',
+        'Shipping Date': '07 Feb 2024',
       }
     ];
+    String currentDate =
+        '${todayDate.day}-${todayDate.month}-${todayDate.year}';
+    void getDifferenceinDate(String ShipmentDate, int index) {
+      var newCurrentDate = currentDate.substring(0, currentDate.length - 7);
+      var newShipmentDate = ShipmentDate.substring(0, currentDate.length - 7);
+      var newCurrentDate1 = int.parse(newCurrentDate);
+      var newShipmentDate1 = int.parse(newShipmentDate);
+      print(newCurrentDate1);
+      print(newShipmentDate1);
+      if (newShipmentDate1 > newCurrentDate1) {
+        // Product is still in processing
+        items[index]['Shippment'] = 'Processing';
+      } else {
+        // Product has been delivered
+        items[index]['Shippment'] = 'Delivered';
+      }
+    }
+
+    // Iterate through items to update 'Shippment' dynamically
+    for (int i = 0; i < allOrderArray.length; i++) {
+      getDifferenceinDate(allOrderArray[i].productShippingDate, i);
+    }
+
+    /*
+    if (newShipmentDate1 > newCurrentDate1) {
+        // Product is still in processing
+        items[index]['Shippment'] = 'Processing';
+      } else {
+        // Product has been delivered
+        items[index]['Shippment'] = 'Delivered';
+      }
+    }
+
+    // Iterate through items to update 'Shippment' dynamically
+    for (int i = 0; i < items.length; i++) {
+      getDifferenceinDate(allOrderArray[i].productShippingDate, i);
+    }
+     */
 
     return ListView.separated(
       shrinkWrap: true,
-      itemCount: 6,
+      itemCount: allOrderArray.isNotEmpty ? allOrderArray.length : 0,
       separatorBuilder: (_, __) => SizedBox(height: 16.0),
       itemBuilder: (_, index) => RoundedContainer(
         index,
@@ -95,97 +196,120 @@ class OrderItems extends StatelessWidget {
             //Column1
             Row(
               children: [
-                Row(
-                  children: [
-                    Icon(Iconsax.tag),
-                    SizedBox(width: 16.0),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
                       children: [
-                        Text("Order Id",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .apply(color: Colors.blue, fontWeightDelta: 1)),
-                        Text(items[index]['orderID'].toString(),
-                            style: Theme.of(context).textTheme.titleMedium),
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(width: 70.0),
-                Row(
-                  children: [
-                    Icon(Iconsax.note),
-                    SizedBox(width: 16.0),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                        Icon(Iconsax.tag),
+                        SizedBox(width: 16.0),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                         Text("Product Name",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge!
                                 .apply(color: Colors.blue, fontWeightDelta: 1)),
-                        Text(items[index]['Product_Name'].toString(),
+                        // Text(items[index]['orderID'].toString(),
+                        Text(
+                            allOrderArray[index].productName.isNotEmpty
+                                ? allOrderArray[index].productName
+                                : '',
                             style: Theme.of(context).textTheme.titleMedium),
                       ],
-                    )
+                        )
+                      ],
+                    ),
+                    SizedBox(width: 70.0),
+                    Row(
+                      children: [
+                        Icon(Iconsax.note),
+                        SizedBox(width: 16.0),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                        Text("Address",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .apply(color: Colors.blue, fontWeightDelta: 1)),
+                        // Text(items[index]['Product_Name'].toString(),
+                        Text(
+                            allOrderArray[index].userShippingAddress.isNotEmpty
+                                ? allOrderArray[index].userShippingAddress
+                                : '',
+                            style: Theme.of(context).textTheme.titleMedium),
+                      ],
+                        )
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
 
-            SizedBox(height: 15.0),
+                SizedBox(height: 15.0),
 
-            //Column2
-            Row(
-              children: [
+                //Column2
                 Row(
                   children: [
-                    Icon(Iconsax.ship),
-                    SizedBox(width: 16.0),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
                       children: [
+                        Icon(Iconsax.ship),
+                        SizedBox(width: 16.0),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //  newCurrentDate = currentDate.substring(0, currentDate.length - 7);
+                        //  newShipmentDate = ShipmentDate.substring(0, currentDate.length - 7);
+                        //  newCurrentDate1 = int.parse(newCurrentDate);
+                        //  newShipmentDate1 = int.parse(newCurrentDate);
+                        // print(newCurrentDate1);
+                        // print(newShipmentDate1);
+                        // if (newShipmentDate1 > newCurrentDate1){
+                        //
+                        // }
+
                         Text(items[index]['Shippment'].toString(),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge!
                                 .apply(color: Colors.blue, fontWeightDelta: 1)),
-                        Text(items[index]['Shippment_value'].toString(),
+                        // Text(items[index]['Shippment_value'].toString(),
+                        Text(currentDate,
                             style: Theme.of(context).textTheme.titleMedium),
                       ],
-                    )
-                  ],
-                ),
-                SizedBox(width: 30.0),
-                Row(
-                  children: [
-                    Icon(Iconsax.calendar),
-                    SizedBox(width: 16.0),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                        )
+                      ],
+                    ),
+                    SizedBox(width: 30.0),
+                    Row(
                       children: [
+                        Icon(Iconsax.calendar),
+                        SizedBox(width: 16.0),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                         Text("Shipping Date",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge!
                                 .apply(color: Colors.blue, fontWeightDelta: 1)),
-                        Text(items[index]['Shipping Date'].toString(),
+                        // Text(items[index]['Shipping Date'].toString(),
+                        Text(
+                            allOrderArray[index].productShippingDate.isNotEmpty
+                                ? allOrderArray[index].productShippingDate
+                                : '',
                             style: Theme.of(context).textTheme.titleMedium),
                       ],
-                    )
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ],
             ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 }
@@ -193,15 +317,15 @@ class OrderItems extends StatelessWidget {
 class RoundedContainer extends StatelessWidget {
   const RoundedContainer(this.index,
       {super.key,
-      this.child,
-      this.width,
-      this.height,
-      this.margin,
-      this.padding,
-      this.showBorder = false,
-      this.radius = 16.0,
-      this.backgroundColor = Colors.white,
-      this.borderColor = Colors.grey});
+        this.child,
+        this.width,
+        this.height,
+        this.margin,
+        this.padding,
+        this.showBorder = false,
+        this.radius = 16.0,
+        this.backgroundColor = Colors.white,
+        this.borderColor = Colors.grey});
 
   final int index;
   final double? width;

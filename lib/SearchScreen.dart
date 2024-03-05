@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'DetailProductScreen.dart';
+import 'Models/ProductDetailsModel.dart';
+import 'Singleton/AppSingleton.dart';
 
 //
 // class AppBar extends StatelessWidget implements PreferredSizeWidget{
@@ -24,11 +26,48 @@ import 'DetailProductScreen.dart';
 //   }
 // }
 
-class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
+class SearchScreen extends StatefulWidget {
+  SearchScreen({super.key});
+
+  @override
+  State<SearchScreen> createState() => SearchScreenState();
+}
+
+class SearchScreenState extends State<SearchScreen> {
+  var allProductArray = [];
 
   @override
   Widget build(BuildContext context) {
+    //For GetAllProductData
+    void getAllData() async {
+      var product = await ProductDetailsModel.getAllProductDetail();
+      if (allProductArray.length == 0) {
+        //add data
+        product.forEach((element) {
+          allProductArray.add(element);
+        });
+      } else if (allProductArray.length == product.length) {
+        //dont do anythinhg
+      } else if (allProductArray.length >= product.length) {
+        // extra data
+        allProductArray.removeRange(0, allProductArray.length);
+        getAllData();
+      }
+      print('+++++++++++++++++');
+      print(product.length);
+      print(allProductArray.length);
+      DateTime today = new DateTime.now();
+      // DateTime date = new DateTime(now.year, now.month, now.day);
+      print("${today.day}-${today.month}-${today.year}");
+
+      var futureDate = today.day + 1;
+      print(futureDate);
+      print("${futureDate}-${today.month}-${today.year}");
+      print('+++++++++++++++++');
+    }
+
+    getAllData();
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.1,
@@ -62,7 +101,8 @@ class SearchScreen extends StatelessWidget {
                   height: 16.0,
                 ),
                 GridView.builder(
-                  itemCount: 6,
+                  itemCount:
+                      allProductArray.length > 1 ? allProductArray.length : 1,
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(left: 5, right: 5),
                   physics: const NeverScrollableScrollPhysics(),
@@ -72,7 +112,8 @@ class SearchScreen extends StatelessWidget {
                     crossAxisSpacing: 10.0,
                     mainAxisExtent: 253,
                   ),
-                  itemBuilder: (_, index) => TProductCardVertical(index),
+                  itemBuilder: (_, index) =>
+                      TProductCardVertical(index, allProductArray),
                 )
               ],
             )),
@@ -82,9 +123,12 @@ class SearchScreen extends StatelessWidget {
 }
 
 class TProductCardVertical extends StatelessWidget {
-  const TProductCardVertical(this.index, {super.key});
+  TProductCardVertical(this.index, this.allProductArray, {super.key});
 
   final int index;
+  var isfavarate;
+  Color _iconColor = Colors.white;
+  var allProductArray = [];
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +140,7 @@ class TProductCardVertical extends StatelessWidget {
         'price': "\$300.00",
         'image': 'images/products/top.png',
         'discount': '30%',
-        'isFavorite': false,
+        'isFavorite': 'true',
       },
       {
         'name': 'White Lehnaga',
@@ -105,7 +149,7 @@ class TProductCardVertical extends StatelessWidget {
         'price': "\$500.00",
         'image': 'images/products/LEHNAGA.png',
         'discount': '10%',
-        'isFavorite': false,
+        'isFavorite': 'false',
       },
       {
         'name': 'White Shirt',
@@ -114,7 +158,7 @@ class TProductCardVertical extends StatelessWidget {
         'price': "\$500.00",
         'image': 'images/products/longskirt.png',
         'discount': '50%',
-        'isFavorite': false,
+        'isFavorite': 'false',
       },
       {
         'name': 'Sadi',
@@ -123,7 +167,7 @@ class TProductCardVertical extends StatelessWidget {
         'price': "\$500.00",
         'image': 'images/products/sadi.png',
         'discount': '30%',
-        'isFavorite': false,
+        'isFavorite': 'false',
       },
       {
         'name': 'JumpSuit',
@@ -132,7 +176,7 @@ class TProductCardVertical extends StatelessWidget {
         'price': "\$500.00",
         'image': 'images/products/jumsuit.png',
         'discount': '10%',
-        'isFavorite': false,
+        'isFavorite': 'false',
       },
       {
         'name': 'Anarkali',
@@ -141,9 +185,60 @@ class TProductCardVertical extends StatelessWidget {
         'price': "\$500.00",
         'image': 'images/products/anarkali.png',
         'discount': '20%',
-        'isFavorite': false,
+        'isFavorite': 'false',
       },
     ];
+
+    void getAllData() async {
+      var product = await ProductDetailsModel.getAllProductDetail();
+      if (allProductArray.length == 0) {
+        //add data
+        product.forEach((element) {
+          allProductArray.add(element);
+        });
+      } else if (allProductArray.length == product.length) {
+        //dont do anythinhg
+      } else if (/*allProductArray.length >= product.length || */ allProductArray
+              .length ==
+          1) {
+        // extra data
+        allProductArray.removeRange(0, allProductArray.length);
+        getAllData();
+      }
+      print('&&&&&&&&&&&&&&&&&&&&&');
+      print(product.length);
+      print(allProductArray.length);
+      print('&&&&&&&&&&&&&&&&&&&&&');
+    }
+    // getAllData();
+
+    if (this.allProductArray.length > 0) {
+      allProductArray = this.allProductArray;
+    } else {
+      allProductArray = [
+        ProductDetailsModel(
+            ProductName: 'dummy',
+            CompanyName: '',
+            Discount: '',
+            ProductPrice: '',
+            imageURL: '')
+      ];
+    }
+    print('==============================');
+    print(allProductArray);
+    print(allProductArray.length);
+    print('==============================');
+    if (allProductArray.length == 1) {
+      getAllData();
+    }
+
+    // allProductArray.forEach((element) {
+    //   print('==============================');
+    //   print(element.ProductName);
+    //   print('==============================');
+    // });
+
+    // print(AllProductDetail);
     return GestureDetector(
       onTap: () {},
       child: Container(
@@ -167,13 +262,16 @@ class TProductCardVertical extends StatelessWidget {
                 children: [
                   Troundedimage(
                     onPressed: () {
+                      appSingletonInstance.productDetailToEdit =
+                          allProductArray[index];
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => DetailProductsScreen()),
                       );
                     },
-                    imageUrl: items[index]['image'].toString(),
+                    // imageUrl: items[index]['image'].toString(),
+                    imageUrl: allProductArray[index].imageURL,
                     applyImageRadius: true,
                     padding: EdgeInsets.only(top: 15, left: 30),
                   ),
@@ -187,7 +285,8 @@ class TProductCardVertical extends StatelessWidget {
                       backgroundColor: Colors.amber,
                       // padding: EdgeInsets.symmetric(horizontal: 8.0,vertical: 8.0),
                       padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                      child: Text(items[index]['discount'].toString()),
+                      // child: Text(items[index]['discount'].toString()), // Old Array Code
+                      child: Text(allProductArray[index].Discount),
                     ),
                   ),
 
@@ -201,18 +300,34 @@ class TProductCardVertical extends StatelessWidget {
                             // color: dark?
                           ),
                           child: IconButton(
-                            onPressed: () {
-                              print(items[index]['isFavorite']);
-                              items[index]['isFavorite'] = false;
-                              print(items[index]['isFavorite']);
-                            },
-                            icon: items[index]['isFavorite'] == true
-                                ? const Icon(Iconsax.heart5)
-                                : const Icon(Iconsax.heart),
-                            color: items[index]['isFavorite'] == true
-                                ? Colors.redAccent
-                                : Colors.white,
-                          ))),
+
+                              // icon: Icon(Icons.star, color: _iconColor),
+                              icon: isfavarate == true
+                                  ? Icon(
+                                      Iconsax.heart5,
+                                      color: _iconColor,
+                                    )
+                                  : Icon(Iconsax.heart),
+                              onPressed: () {
+                                isfavarate =
+                                    items[index]['isFavorite'] == 'false'
+                                        ? 'true'
+                                        : 'false';
+                              })))
+
+                  // onPressed: () {
+                  //   isfavarate = items[index]['isFavorite'] == 'false' ? 'true' : 'false';
+                  //   print(isfavarate);
+                  //    items[index]['isFavorite'] = isfavarate.toString();
+                  //
+                  //         // }, icon: items[index]['isFavorite'] == true ? const Icon(Iconsax.heart5) : const Icon(Iconsax.heart),
+                  //         }, icon: isfavarate == true ? const Icon(Iconsax.heart5) : const Icon(Iconsax.heart),
+                  //
+                  // // color: items[index]['isFavorite'] == true
+                  // color: isfavarate == true
+                  //     ? Colors.redAccent
+                  //     : Colors.white,
+                  //   ))),
                 ],
               ),
             ),
@@ -223,7 +338,8 @@ class TProductCardVertical extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    items[index]['name'].toString(),
+                    // items[index]['name'].toString(),// Old Array Code
+                    allProductArray[index].ProductName,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                     textAlign: TextAlign.start,
@@ -238,7 +354,8 @@ class TProductCardVertical extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        items[index]['company_name'].toString(),
+                        // items[index]['company_name'].toString(), // Old Array Code
+                        allProductArray[index].CompanyName,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontFamily: 'RobotoMono',
@@ -260,7 +377,8 @@ class TProductCardVertical extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        items[index]['price'].toString(),
+                        // items[index]['price'].toString(), //Old Array Code
+                        allProductArray[index].ProductPrice,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(

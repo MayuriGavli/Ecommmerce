@@ -225,15 +225,21 @@ class AddProductScreenState extends State<AddProductScreen> {
     final productTableObject = FirebaseFirestore.instance
         .collection('Product')
         .doc(); //get the user table and made object
+
+    var imageTrimedFromFirst =
+        _selectedImage.toString().substring(7); //Trim Image From first
+    var finalImageAfterTrimFromBack = imageTrimedFromFirst.substring(
+        0, imageTrimedFromFirst.length - 1); //Trim Image from Back
+    print(finalImageAfterTrimFromBack);
+
     final productData = ProductDetailsModel(
         id: productTableObject.id,
         ProductName: ProductName,
         CompanyName: CompanyName,
         Discount: Discount,
         ProductPrice: ProductPrice,
-        imageURL: _selectedImage
-            .toString()
-            .substring(6)); //making an object of user data
+        imageURL: finalImageAfterTrimFromBack.toString());
+
     final jsonData = productData.toJson(); // Converted the userdata into json
     await productTableObject.set(jsonData).then((obj) {
       //checking if the data is inserted oor not
@@ -241,7 +247,7 @@ class AddProductScreenState extends State<AddProductScreen> {
       print("=================");
       print(productTableObject.id);
       print("=================");
-      // Navigator.of(context).pop();
+      Navigator.of(context).pop();
     }).catchError((onError) {
       print(onError);
     });
