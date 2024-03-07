@@ -1,6 +1,8 @@
 import 'package:e_commmerce1/Models/OrderModel.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class AdminOrderScreen extends StatefulWidget {
   const AdminOrderScreen({super.key});
@@ -10,6 +12,7 @@ class AdminOrderScreen extends StatefulWidget {
 }
 
 class AdminOrderScreenState extends State<AdminOrderScreen> {
+  bool dataFetched = false;
   var allOrderArray = [
     OrderModel(
         id: '',
@@ -20,9 +23,24 @@ class AdminOrderScreenState extends State<AdminOrderScreen> {
         productShippingDate: '')
   ];
 
+  void getAllData() async {
+    if (!dataFetched) {
+      var order = await OrderModel.getAllOrderDetailOfUser();
+
+      setState(() {
+        allOrderArray = order;
+        dataFetched = true;
+      });
+
+      print(order.length);
+      print(allOrderArray.length);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     getAllData();
+    dataFetched = false;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -38,13 +56,6 @@ class AdminOrderScreenState extends State<AdminOrderScreen> {
       ),
       body: OrderItems(allOrderArray),
     );
-  }
-
-  void getAllData() async {
-    var order = await OrderModel.getAllOrderDetail();
-    allOrderArray = order;
-    print(order.length);
-    print(allOrderArray.length);
   }
 }
 
@@ -63,10 +74,16 @@ class OrderItems extends StatelessWidget {
         productShippingDate: '')
   ];
 
+  void showAlert(BuildContext context) {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.success,
+      confirmBtnText: 'OK',
+      text: "Order Dispatch Successfully",
+    );
+  }
+
   Widget build(BuildContext context) {
-    // if (allOrderArray.length > 0){
-    //   allOrderArray = this.allOrderArray;
-    // }
     var items = [
       {
         'orderID': '#0977',
@@ -111,7 +128,6 @@ class OrderItems extends StatelessWidget {
         'Shipping Date': '1 Feb 2024',
       }
     ];
-    var BGColor = Colors.white;
     return ListView.separated(
       shrinkWrap: true,
       itemCount: allOrderArray.isNotEmpty ? allOrderArray.length : 0,
@@ -119,7 +135,6 @@ class OrderItems extends StatelessWidget {
       itemBuilder: (_, index) => RoundedContainer(
         index,
         showBorder: true,
-        backgroundColor: BGColor,
         padding: EdgeInsets.all(12.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -218,19 +233,9 @@ class OrderItems extends StatelessWidget {
                       foregroundColor: Colors.white, // text color
                     ),
                     onPressed: () {
-                      BGColor = Colors.green;
+                      // appSingletonInstance.showToast('Product Dispatched');
+                      showAlert(context);
                     },
-
-                    // style: ButtonStyle(
-                    //   backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    //         (Set<MaterialState> states) {
-                    //       if (states.contains(MaterialState.pressed))
-                    //         return Colors.green;
-                    //       return Colors.black; // Use the component's default.
-                    //     },
-                    //   ),
-                    // ),
-
                     child: Text("Dispatch"),
                   ),
                 ),

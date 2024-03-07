@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commmerce1/Singleton/AppSingleton.dart';
 
 class OrderModel {
   String id;
@@ -61,14 +62,36 @@ class OrderModel {
         productShippingDate: data['productShippingDate']);
   }
 
-  static Future<List<OrderModel>> getAllOrderDetail() async {
-    final orderTableObject =
-        await FirebaseFirestore.instance.collection('Orders').get();
-    final orderData = orderTableObject.docs
-        .map((QueryDocumentSnapshot<Map<String, dynamic>> e) =>
-            OrderModel.fromQueryDocumentSnapShot(e))
-        .toList();
-    if (orderData.length > 0) {
+  static Future<List<OrderModel>> getAllOrderDetailOfUser() async {
+    var orderData = [
+      OrderModel(
+          id: '',
+          userId: '',
+          userName: '',
+          userShippingAddress: '',
+          productName: '',
+          productShippingDate: '')
+    ];
+    if (appSingletonInstance.userDataFromSingleton.userEmail ==
+        'mrgavli28@gmail.com') {
+      final orderTableObject =
+          await FirebaseFirestore.instance.collection('Orders').get();
+      orderData = orderTableObject.docs
+          .map((QueryDocumentSnapshot<Map<String, dynamic>> e) =>
+              OrderModel.fromQueryDocumentSnapShot(e))
+          .toList();
+    } else {
+      var userId = appSingletonInstance.userDataFromSingleton.id;
+      final orderTableObject = await FirebaseFirestore.instance
+          .collection('Orders')
+          .where("userId", isEqualTo: userId)
+          .get();
+      orderData = orderTableObject.docs
+          .map((QueryDocumentSnapshot<Map<String, dynamic>> e) =>
+              OrderModel.fromQueryDocumentSnapShot(e))
+          .toList();
+    }
+    if (orderData.isNotEmpty) {
       return orderData;
     } else {
       return [];

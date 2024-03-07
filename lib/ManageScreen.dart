@@ -14,6 +14,7 @@ class ManageScreen extends StatefulWidget {
 }
 
 class ManageScreenState extends State<ManageScreen> {
+  bool dataFetched = false;
   var allProductArray = [
     ProductDetailsModel(
         id: '',
@@ -21,12 +22,34 @@ class ManageScreenState extends State<ManageScreen> {
         CompanyName: '',
         Discount: '',
         ProductPrice: '',
-        imageURL: '')
+        imageURL: '',
+        isLiked: false)
   ];
+
+  void initState() {
+    super.initState();
+    dataFetched = false;
+    _getAllData();
+  }
+
+  _getAllData() async {
+    if (!dataFetched) {
+      var product = await ProductDetailsModel.getAllProductDetail();
+      setState(() {
+        allProductArray = product;
+        dataFetched = true;
+      });
+
+      print('+++++++++++++++++');
+      print(allProductArray.length);
+      print('+++++++++++++++++');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    getAllData();
+    _getAllData();
+    dataFetched = false;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -53,28 +76,6 @@ class ManageScreenState extends State<ManageScreen> {
       ),
       body: _load(allProductArray),
     );
-  }
-
-  //For GetAllProductData
-  void getAllData() async {
-    var product = await ProductDetailsModel.getAllProductDetail();
-    if (allProductArray.length == 0) {
-      //add data
-      product.forEach((element) {
-        allProductArray.add(element);
-      });
-    } else if (allProductArray.length == product.length) {
-      //dont do anythinhg
-    } else if (allProductArray.length == 1 ||
-        product.length != allProductArray.length) {
-      // extra data
-      allProductArray.removeRange(0, allProductArray.length);
-      getAllData();
-    }
-    print('+++++++++++++++++');
-    print(product.length);
-    print(allProductArray.length);
-    print('+++++++++++++++++');
   }
 }
 
@@ -121,7 +122,8 @@ class TProductCardVertical extends StatelessWidget {
         CompanyName: '',
         Discount: '',
         ProductPrice: '',
-        imageURL: '')
+        imageURL: '',
+        isLiked: false)
   ];
 
   @override

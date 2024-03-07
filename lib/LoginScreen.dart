@@ -4,14 +4,11 @@ import 'package:e_commmerce1/AdminHomeScreen.dart';
 import 'package:e_commmerce1/Models/UserModel.dart';
 import 'package:e_commmerce1/Navigation.dart';
 import 'package:e_commmerce1/Singleton/AppSingleton.dart';
-import 'package:e_commmerce1/usr_auth/firebase_auth_implementation/firebase_auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// import 'Providers/SharedPreferencesService.dart';
-import 'Googlelogin.dart';
 import 'SignScreen.dart';
 
 // import 'package:shared_preferences/shared_preferences.dart';
@@ -24,9 +21,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  User? _user;
+  // User? _user;
 
-  final FirebaseAuthService _auth = FirebaseAuthService();
+  // final FirebaseAuthService _auth = FirebaseAuthService();
 
   // final SharedPreferencesService _prefs = SharedPreferencesService();
   final _formKey = GlobalKey<FormState>();
@@ -229,10 +226,10 @@ class LoginScreenState extends State<LoginScreen> {
                 child: IconButton(
                   onPressed: () {
                     // signInWithGoogle();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignInDemo()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => SignInDemo()),
+                    // );
                   },
                   icon: Image(
                       width: 25,

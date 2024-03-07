@@ -8,14 +8,14 @@ import 'package:quickalert/quickalert.dart';
 import 'Models/OrderModel.dart';
 import 'Singleton/AppSingleton.dart';
 
-class BuyNowScreen extends StatefulWidget {
-  const BuyNowScreen({super.key});
+class PaymentScreen extends StatefulWidget {
+  const PaymentScreen({super.key});
 
   @override
-  BuyNowScreenState createState() => BuyNowScreenState();
+  PaymentScreenState createState() => PaymentScreenState();
 }
 
-class BuyNowScreenState extends State<BuyNowScreen> {
+class PaymentScreenState extends State<PaymentScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
   final _ShippingAddressController = TextEditingController();
@@ -135,6 +135,10 @@ class BuyNowScreenState extends State<BuyNowScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue, // background color
+                          foregroundColor: Colors.white, // text color
+                        ),
                         onPressed: () {
                           // Check if the form is valid and terms are agreed
                           if (_formKey.currentState!.validate()) {

@@ -36,6 +36,7 @@ class AddProductScreenState extends State<AddProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         elevation: 0.1,
         title: const Text("Add Product"),
         leading: IconButton(
@@ -171,6 +172,10 @@ class AddProductScreenState extends State<AddProductScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue, // background color
+                          foregroundColor: Colors.white, // text color
+                        ),
                         onPressed: () {
                           // Check if the form is valid and terms are agreed
                           if (_formKey.currentState!.validate()) {
@@ -238,7 +243,8 @@ class AddProductScreenState extends State<AddProductScreen> {
         CompanyName: CompanyName,
         Discount: Discount,
         ProductPrice: ProductPrice,
-        imageURL: finalImageAfterTrimFromBack.toString());
+        imageURL: finalImageAfterTrimFromBack.toString(),
+        isLiked: false);
 
     final jsonData = productData.toJson(); // Converted the userdata into json
     await productTableObject.set(jsonData).then((obj) {

@@ -1,6 +1,5 @@
-import 'package:e_commmerce1/BuyNow.dart';
+import 'package:e_commmerce1/PaymentScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'Singleton/AppSingleton.dart';
@@ -147,42 +146,44 @@ class DetailProductsScreen extends StatelessWidget {
                             )
                           ],
                         ),
-                        const SizedBox(height: 16.0),
+                        const SizedBox(height: 35.0),
 
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue, // background color
+                              foregroundColor: Colors.white, // text color
+                            ),
                             onPressed: () {
                               //Check if the form is valid and terms are agreed
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => BuyNowScreen()),
+                                    builder: (context) => PaymentScreen()),
                               );
                             },
                             child: const Text("BUY NOW"),
                           ),
                         ),
 
-                        const SizedBox(height: 16.0),
-
                         //create new account
-                        SizedBox(
-                          width: double.infinity,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              Fluttertoast.showToast(
-                                  msg: "Product is Added To Card",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 2,
-                                  backgroundColor: Colors.blue,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
-                            },
-                            child: Text("Add To Cart"),
-                          ),
-                        ),
+                        // SizedBox(
+                        //   width: double.infinity,
+                        //   child: OutlinedButton(
+                        //     onPressed: () {
+                        //       Fluttertoast.showToast(
+                        //           msg: "Product is Added To Card",
+                        //           toastLength: Toast.LENGTH_SHORT,
+                        //           gravity: ToastGravity.BOTTOM,
+                        //           timeInSecForIosWeb: 2,
+                        //           backgroundColor: Colors.blue,
+                        //           textColor: Colors.white,
+                        //           fontSize: 16.0);
+                        //     },
+                        //     child: Text("Add To Cart"),
+                        //   ),
+                        // ),
                       ],
                     ),
                   )

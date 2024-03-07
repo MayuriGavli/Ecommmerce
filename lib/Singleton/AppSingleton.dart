@@ -16,7 +16,8 @@ class appSingleton {
       CompanyName: '',
       Discount: '',
       ProductPrice: '',
-      imageURL: '');
+      imageURL: '',
+      isLiked: false);
 
   // static UserModel userDataFromSingleton;
   factory appSingleton() {

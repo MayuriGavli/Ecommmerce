@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commmerce1/LoginScreen.dart';
 import 'package:e_commmerce1/Models/UserModel.dart';
 import 'package:e_commmerce1/Navigation.dart';
-import 'package:e_commmerce1/usr_auth/firebase_auth_implementation/firebase_auth_service.dart';
 import 'package:flutter/material.dart';
 
 // import 'Providers/SharedPreferencesService.dart';
@@ -15,7 +14,7 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final FirebaseAuthService _auth = FirebaseAuthService();
+  // final FirebaseAuthService _auth = FirebaseAuthService();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();

@@ -7,7 +7,7 @@ import 'package:e_commmerce1/LoginScreen.dart';
 import 'package:e_commmerce1/Models/UserModel.dart';
 import 'package:e_commmerce1/Providers/SharedPreferencesService.dart';
 import 'package:e_commmerce1/Singleton/AppSingleton.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,7 +24,6 @@ class ProfileScreen extends StatefulWidget {
 
 class ProfileScreenState extends State<ProfileScreen> {
   File? _selectedImage;
-
   String _user_email = '';
   String _user_name = '';
   String _user_password = '';
@@ -38,13 +37,6 @@ class ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // _user_name = appSingletonInstance.userDataFromSingleton.userName ?? '';
-    // _user_email = appSingletonInstance.userDataFromSingleton.userEmail ?? '';
-    // _user_password =
-    //     appSingletonInstance.userDataFromSingleton.userPassword ?? '';
-    // _user_phoneNo =
-    //     appSingletonInstance.userDataFromSingleton.userPhoneNo ?? '';
-    // _user_id = appSingletonInstance.userDataFromSingleton.id ?? '';
     setUserDataInProfileScreen();
   }
 
@@ -61,19 +53,6 @@ class ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
       body:
-      // StreamBuilder<List<User>>(
-      //   stream: getAllUserData(),
-      //   builder: (context,snapshot){
-      //     if(snapshot.hasData){
-      //       final users = snapshot.data!;
-      //
-      //       return ListView(
-      //         children: users.map(buildUser).toList(),
-      //       )
-      //     }
-      //   },
-      //
-      // ),
       SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20.0),
@@ -153,13 +132,14 @@ class ProfileScreenState extends State<ProfileScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue, // background color
+                    foregroundColor: Colors.white, // text color
+                  ),
                   onPressed: () {
                     //Check if the form is valid and terms are agreed
-                    Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditProfile()))
-                        .then(refreshData);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => EditProfile()));
                   },
                   child: const Text("Edit Profile"),
                 ),
@@ -180,8 +160,8 @@ class ProfileScreenState extends State<ProfileScreen> {
                                 child: Text("No")),
                             TextButton(
                                 onPressed: () {
-                                  FirebaseAuth.instance.signOut();
-                                  sharedPrefrenceInstance.saveValue(
+                                  // FirebaseAuth.instance.signOut();
+                                      sharedPrefrenceInstance.saveValue(
                                       'userData', ''); //Logout Code
                                   Navigator.push(
                                     context,
@@ -253,12 +233,6 @@ class ProfileScreenState extends State<ProfileScreen> {
         // _selectedImage != null ? Image.file(_selectedImage!) : const Text("Please Select an Image")
       ]),
     );
-  }
-
-  FutureOr refreshData(dynamic value) {
-    print('------------Hiiiiiiiiiii----------------');
-    print(appSingletonInstance.userDataFromSingleton.userEmail);
-    setUserDataInProfileScreen();
   }
 
   void setUserDataInProfileScreen() {

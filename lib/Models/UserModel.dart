@@ -50,6 +50,17 @@ class UserModel {
         userPhoneNo: data['userPhoneNo']);
   }
 
+  factory UserModel.fromQueryDocumentSnapShot(
+      QueryDocumentSnapshot<Map<String, dynamic>> jsonData) {
+    final data = jsonData.data()!;
+    return UserModel(
+        id: data['id'],
+        userName: data['userName'],
+        userEmail: data['userEmail'],
+        userPassword: data['userPassword'],
+        userPhoneNo: data['userPhoneNo']);
+  }
+
   //Get Single User Data from its email.
   static Future<UserModel> getSingledata(String email) async {
     var isDataPresent = false;
@@ -70,6 +81,21 @@ class UserModel {
     } else {
       return UserModel(
           userName: '', userEmail: '', userPassword: '', userPhoneNo: '');
+    }
+  }
+
+  // Get All User Data
+  static Future<List<UserModel>> getALlUsers() async {
+    final userTableObject =
+        await FirebaseFirestore.instance.collection('User').get();
+    final userData = userTableObject.docs
+        .map((QueryDocumentSnapshot<Map<String, dynamic>> e) =>
+            UserModel.fromQueryDocumentSnapShot(e))
+        .toList();
+    if (userData.isNotEmpty) {
+      return userData;
+    } else {
+      return [];
     }
   }
 
