@@ -11,6 +11,7 @@ class OrderScreen extends StatefulWidget {
 }
 
 class OrderScreenState extends State<OrderScreen> {
+  bool dataFetched = false;
   var allOrderArray = [
     OrderModel(
         id: '',
@@ -21,9 +22,25 @@ class OrderScreenState extends State<OrderScreen> {
         productShippingDate: '')
   ];
 
+  void getAllData() async {
+    if (!dataFetched) {
+      var order = await OrderModel.getAllOrderDetailOfUser();
+
+      setState(() {
+        allOrderArray = order;
+        dataFetched = true;
+      });
+
+      print(order.length);
+      print(allOrderArray.length);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     getAllData();
+    dataFetched = false;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -36,18 +53,8 @@ class OrderScreenState extends State<OrderScreen> {
               padding: EdgeInsets.only(right: 8, left: 8, top: 8, bottom: 8)),
         ],
       ),
-      body: OrderItems(allOrderArray),
+      body: OrderItems(allOrderArray.isNotEmpty ? allOrderArray : []),
     );
-  }
-
-  void getAllData() async {
-    var order = await OrderModel.getAllOrderDetail();
-    // order.forEach((element) {
-    //   allOrderArray.add(element);
-    // });
-    allOrderArray = order;
-    print(order.length);
-    print(allOrderArray.length);
   }
 }
 
@@ -75,7 +82,7 @@ class OrderItems extends StatelessWidget {
       {
         'orderID': '#0977',
         'Product_Name': 'Crop Top',
-        'Shippment': '',
+        'Shippment': 'Processing',
         'Shippment_value': '01 Feb 2024',
         'Shipping Date': '07 Feb 2024',
       },
@@ -143,6 +150,7 @@ class OrderItems extends StatelessWidget {
         'Shipping Date': '07 Feb 2024',
       }
     ];
+
     String currentDate =
         '${todayDate.day}-${todayDate.month}-${todayDate.year}';
     void getDifferenceinDate(String ShipmentDate, int index) {
@@ -161,30 +169,17 @@ class OrderItems extends StatelessWidget {
       }
     }
 
-    // Iterate through items to update 'Shippment' dynamically
-    for (int i = 0; i < allOrderArray.length; i++) {
-      getDifferenceinDate(allOrderArray[i].productShippingDate, i);
-    }
-
-    /*
-    if (newShipmentDate1 > newCurrentDate1) {
-        // Product is still in processing
-        items[index]['Shippment'] = 'Processing';
-      } else {
-        // Product has been delivered
-        items[index]['Shippment'] = 'Delivered';
+    if (allOrderArray.length > 1) {
+      // Iterate through items to update 'Shippment' dynamically
+      for (int i = 0; i < allOrderArray.length; i++) {
+        getDifferenceinDate(allOrderArray[i].productShippingDate, i);
       }
     }
 
-    // Iterate through items to update 'Shippment' dynamically
-    for (int i = 0; i < items.length; i++) {
-      getDifferenceinDate(allOrderArray[i].productShippingDate, i);
-    }
-     */
-
     return ListView.separated(
       shrinkWrap: true,
-      itemCount: allOrderArray.isNotEmpty ? allOrderArray.length : 0,
+      itemCount: allOrderArray.length > 0 ? allOrderArray.length : 0,
+      // itemCount: allOrderArray.length.compareTo(0),
       separatorBuilder: (_, __) => SizedBox(height: 16.0),
       itemBuilder: (_, index) => RoundedContainer(
         index,
@@ -196,14 +191,14 @@ class OrderItems extends StatelessWidget {
             //Column1
             Row(
               children: [
-                    Row(
+                Row(
+                  children: [
+                    Icon(Iconsax.tag),
+                    SizedBox(width: 16.0),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Iconsax.tag),
-                        SizedBox(width: 16.0),
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
                         Text("Product Name",
                             style: Theme.of(context)
                                 .textTheme
@@ -213,21 +208,21 @@ class OrderItems extends StatelessWidget {
                         Text(
                             allOrderArray[index].productName.isNotEmpty
                                 ? allOrderArray[index].productName
-                                : '',
+                                : 'Product',
                             style: Theme.of(context).textTheme.titleMedium),
                       ],
-                        )
-                      ],
-                    ),
-                    SizedBox(width: 70.0),
-                    Row(
+                    )
+                  ],
+                ),
+                SizedBox(width: 55.0),
+                Row(
+                  children: [
+                    Icon(Iconsax.note),
+                    SizedBox(width: 16.0),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Iconsax.note),
-                        SizedBox(width: 16.0),
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
                         Text("Address",
                             style: Theme.of(context)
                                 .textTheme
@@ -237,27 +232,27 @@ class OrderItems extends StatelessWidget {
                         Text(
                             allOrderArray[index].userShippingAddress.isNotEmpty
                                 ? allOrderArray[index].userShippingAddress
-                                : '',
+                                : 'Address',
                             style: Theme.of(context).textTheme.titleMedium),
                       ],
-                        )
-                      ],
-                    ),
+                    )
                   ],
                 ),
+              ],
+            ),
 
-                SizedBox(height: 15.0),
+            SizedBox(height: 15.0),
 
-                //Column2
+            //Column2
+            Row(
+              children: [
                 Row(
                   children: [
-                    Row(
-                      children: [
-                        Icon(Iconsax.ship),
-                        SizedBox(width: 16.0),
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    Icon(Iconsax.ship),
+                    SizedBox(width: 16.0),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         //  newCurrentDate = currentDate.substring(0, currentDate.length - 7);
                         //  newShipmentDate = ShipmentDate.substring(0, currentDate.length - 7);
@@ -270,18 +265,23 @@ class OrderItems extends StatelessWidget {
                         // }
 
                         Text(items[index]['Shippment'].toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .apply(color: Colors.blue, fontWeightDelta: 1)),
-                        // Text(items[index]['Shippment_value'].toString(),
-                        Text(currentDate,
-                            style: Theme.of(context).textTheme.titleMedium),
-                      ],
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .apply(color: Colors.blue,
+                                    fontWeightDelta: 1)),
+                            // Text(items[index]['Shippment_value'].toString(),
+                            Text(currentDate,
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .titleMedium),
+                          ],
                         )
                       ],
                     ),
-                    SizedBox(width: 30.0),
+                    SizedBox(width: 80.0),
                     Row(
                       children: [
                         Icon(Iconsax.calendar),
@@ -290,18 +290,24 @@ class OrderItems extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                        Text("Shipping Date",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .apply(color: Colors.blue, fontWeightDelta: 1)),
-                        // Text(items[index]['Shipping Date'].toString(),
-                        Text(
-                            allOrderArray[index].productShippingDate.isNotEmpty
-                                ? allOrderArray[index].productShippingDate
-                                : '',
-                            style: Theme.of(context).textTheme.titleMedium),
-                      ],
+                            Text("Shipping Date",
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .apply(color: Colors.blue,
+                                    fontWeightDelta: 1)),
+                            // Text(items[index]['Shipping Date'].toString(),
+                            Text(
+                                allOrderArray[index].productShippingDate
+                                    .isNotEmpty
+                                    ? allOrderArray[index].productShippingDate
+                                    : 'Date',
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .titleMedium),
+                          ],
                         )
                       ],
                     ),

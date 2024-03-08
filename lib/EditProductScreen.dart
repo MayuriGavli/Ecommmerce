@@ -43,6 +43,7 @@ class EditProductScreenState extends State<EditProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         elevation: 0.1,
         title: const Text("Edit Product"),
         leading: IconButton(
@@ -225,30 +226,15 @@ class EditProductScreenState extends State<EditProductScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue, // background color
+                          foregroundColor: Colors.white, // text color
+                        ),
                         onPressed: () {
                           // Check if the form is valid and terms are agreed
-                          // if (_formKey.currentState!.validate()) {
-                          //   // Navigator.push(
-                          //   //   context,
-                          //   //   MaterialPageRoute(
-                          //   //       builder: (context) => HomePage()),
-                          //   // );
-                          //   // Fluttertoast.showToast(
-                          //   //     msg: "This is Center Short Toast",
-                          //   //     toastLength: Toast.LENGTH_SHORT,
-                          //   //     gravity: ToastGravity.CENTER,
-                          //   //     timeInSecForIosWeb: 1,
-                          //   //     backgroundColor: Colors.red,
-                          //   //     textColor: Colors.white,
-                          //   //     fontSize: 16.0
-                          //   // );
-                          //   ScaffoldMessenger.of(context)
-                          //       .showSnackBar(const SnackBar(
-                          //     content: Text("Product Added Successfully"),
-                          //   ));
-                          //   _submitForm();
-                          // }
-                          _submitForm();
+                          if (_formKey.currentState!.validate()) {
+                            _submitForm();
+                          }
                         },
                         child: const Text("Save"),
                       ),
@@ -324,6 +310,7 @@ class EditProductScreenState extends State<EditProductScreen> {
         0, imageTrimedFromFirst.length - 1); //Trim Image from Back
 
     String productId = appSingletonInstance.productDetailToEdit.id;
+    bool productIsLiked = appSingletonInstance.productDetailToEdit.isLiked;
     String productName = _ProductnameController.text;
     String companyName = _CompanynameController.text;
     String productDiscount = _TagController.text;
@@ -343,6 +330,7 @@ class EditProductScreenState extends State<EditProductScreen> {
     print('productDiscount: $productDiscount');
     print('productPrice: $productPrice');
     print('productImage: $productImage');
+    print('productIsLiked: $productIsLiked');
     print('**********************');
 
     var editedProductData = ProductDetailsModel(
@@ -351,7 +339,8 @@ class EditProductScreenState extends State<EditProductScreen> {
         CompanyName: companyName,
         Discount: productDiscount,
         ProductPrice: productPrice,
-        imageURL: productImage);
+        imageURL: productImage,
+        isLiked: productIsLiked);
 
     await ProductDetailsModel.updateProductRecord(editedProductData);
 

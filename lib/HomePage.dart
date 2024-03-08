@@ -14,32 +14,37 @@ class HomePage extends StatefulWidget {
 }
 
 class HomepageState extends State<HomePage> {
-  var allProductArray = [];
+  bool dataFetched = false;
+  var allProductArray = [
+    ProductDetailsModel(
+        ProductName: 'dummy1',
+        CompanyName: '',
+        Discount: '',
+        ProductPrice: '',
+        imageURL: '',
+        isLiked: false)
+  ];
+
+  void getAllData() async {
+    if (!dataFetched) {
+      var product = await ProductDetailsModel.getAllProductDetail();
+
+      setState(() {
+        allProductArray = product;
+        dataFetched = true;
+      });
+
+      print('+++++++++++++++++');
+      // print(product.length);
+      print(allProductArray.length);
+      print('+++++++++++++++++');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    //For GetAllProductData
-    void getAllData() async {
-      var product = await ProductDetailsModel.getAllProductDetail();
-      if (allProductArray.length == 0) {
-        //add data
-        product.forEach((element) {
-          allProductArray.add(element);
-        });
-      } else if (allProductArray.length == product.length) {
-        //dont do anythinhg
-      } else if (allProductArray.length >= product.length) {
-        // extra data
-        allProductArray.removeRange(0, allProductArray.length);
-        getAllData();
-      }
-      print('+++++++++++++++++');
-      print(product.length);
-      print(allProductArray.length);
-    }
-
     getAllData();
-
+    dataFetched = false;
     Widget imageCarousel = Container(
       child: Column(
         children: [
@@ -98,12 +103,6 @@ class HomepageState extends State<HomePage> {
                 Icons.search,
                 color: Colors.white,
               )),
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.shopping_cart,
-                color: Colors.white,
-              ))
         ],
       ),
 
@@ -186,7 +185,7 @@ class HomepageState extends State<HomePage> {
                   const SizedBox(height: 10.0),
                   GridView.builder(
                     itemCount:
-                        allProductArray.length > 1 ? allProductArray.length : 1,
+                        allProductArray.length > 1 ? allProductArray.length : 0,
                     // itemCount: 6,
                     shrinkWrap: true,
                     // padding: const EdgeInsets.only(left: 2, right: 2),
@@ -209,16 +208,34 @@ class HomepageState extends State<HomePage> {
   }
 }
 
-class TProductCardVertical extends StatelessWidget {
-  TProductCardVertical(this.index, this.allProductArray, {super.key});
-
+class TProductCardVertical extends StatefulWidget {
+  TProductCardVertical(this.index, this.allProductArray, {Key? key})
+      : super(key: key);
   final int index;
-  var isfavarate;
-  Color _iconColor = Colors.white;
-  var allProductArray = [];
+  List<ProductDetailsModel> allProductArray;
+
+  @override
+  _TProductCardVerticalState createState() =>
+      _TProductCardVerticalState(this.index, this.allProductArray);
+}
+
+class _TProductCardVerticalState extends State<TProductCardVertical> {
+  _TProductCardVerticalState(this.index, this.allProductArray);
+
+  List<ProductDetailsModel> allProductArray;
+  final int index;
+  bool isLiked = true;
+  var productToEdit = ProductDetailsModel(
+      ProductName: 'dummy1',
+      CompanyName: '',
+      Discount: '',
+      ProductPrice: '',
+      imageURL: '',
+      isLiked: false);
 
   @override
   Widget build(BuildContext context) {
+    // isLiked = allProductArray[index].isLiked;
     var items = [
       {
         'name': 'T-Shirt',
@@ -275,57 +292,6 @@ class TProductCardVertical extends StatelessWidget {
         'isFavorite': 'false',
       },
     ];
-
-    void getAllData() async {
-      var product = await ProductDetailsModel.getAllProductDetail();
-      if (allProductArray.length == 0) {
-        //add data
-        product.forEach((element) {
-          allProductArray.add(element);
-        });
-      } else if (allProductArray.length == product.length) {
-        //dont do anythinhg
-      } else if (/*allProductArray.length >= product.length || */ allProductArray
-              .length ==
-          1) {
-        // extra data
-        allProductArray.removeRange(0, allProductArray.length);
-        getAllData();
-      }
-      print('&&&&&&&&&&&&&&&&&&&&&');
-      print(product.length);
-      print(allProductArray.length);
-      print('&&&&&&&&&&&&&&&&&&&&&');
-    }
-    // getAllData();
-
-    if (this.allProductArray.length > 0) {
-      allProductArray = this.allProductArray;
-    } else {
-      allProductArray = [
-        ProductDetailsModel(
-            ProductName: 'dummy',
-            CompanyName: '',
-            Discount: '',
-            ProductPrice: '',
-            imageURL: '')
-      ];
-    }
-    print('==============================');
-    print(allProductArray);
-    print(allProductArray.length);
-    print('==============================');
-    if (allProductArray.length == 1) {
-      getAllData();
-    }
-
-    // allProductArray.forEach((element) {
-    //   print('==============================');
-    //   print(element.ProductName);
-    //   print('==============================');
-    // });
-
-    // print(AllProductDetail);
     return GestureDetector(
       onTap: () {},
       child: Container(
@@ -382,39 +348,27 @@ class TProductCardVertical extends StatelessWidget {
                       top: -8,
                       right: -7,
                       child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            // color: dark?
-                          ),
-                          child: IconButton(
-
-                              // icon: Icon(Icons.star, color: _iconColor),
-                              icon: isfavarate == true
-                                  ? Icon(
-                                      Iconsax.heart5,
-                                      color: _iconColor,
-                                    )
-                                  : Icon(Iconsax.heart),
-                              onPressed: () {
-                                isfavarate =
-                                    items[index]['isFavorite'] == 'false'
-                                        ? 'true'
-                                        : 'false';
-                              })))
-
-                  // onPressed: () {
-                  //   isfavarate = items[index]['isFavorite'] == 'false' ? 'true' : 'false';
-                  //   print(isfavarate);
-                  //    items[index]['isFavorite'] = isfavarate.toString();
-                  //
-                  //         // }, icon: items[index]['isFavorite'] == true ? const Icon(Iconsax.heart5) : const Icon(Iconsax.heart),
-                  //         }, icon: isfavarate == true ? const Icon(Iconsax.heart5) : const Icon(Iconsax.heart),
-                  //
-                  // // color: items[index]['isFavorite'] == true
-                  // color: isfavarate == true
-                  //     ? Colors.redAccent
-                  //     : Colors.white,
-                  //   ))),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          // color: dark?
+                        ),
+                        child: IconButton(
+                          icon: allProductArray[index].isLiked
+                              ? Icon(Icons.favorite)
+                              : Icon(Icons.favorite),
+                          color: allProductArray[index].isLiked
+                              ? Colors.red
+                              : Colors.grey,
+                          onPressed: () async {
+                            setState(() {
+                              allProductArray[index].isLiked =
+                                  !allProductArray[index].isLiked;
+                            });
+                            await ProductDetailsModel.updateProductRecord(
+                                allProductArray[index]);
+                          },
+                        ),
+                      ))
                 ],
               ),
             ),
@@ -475,23 +429,23 @@ class TProductCardVertical extends StatelessWidget {
                             fontSize: 14,
                             color: Colors.black),
                       ),
-                      Container(
-                        decoration: const BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              bottomRight: Radius.circular(10.0),
-                            )),
-                        child: const SizedBox(
-                          width: 30 * 1.2,
-                          height: 30 * 1.2,
-                          child: Center(
-                              child: Icon(
-                                Iconsax.add,
-                                color: Colors.white,
-                              )),
-                        ),
-                      )
+                      // Container(
+                      //   decoration: const BoxDecoration(
+                      //       color: Colors.brown,
+                      //       borderRadius: BorderRadius.only(
+                      //         topLeft: Radius.circular(10.0),
+                      //         bottomRight: Radius.circular(10.0),
+                      //       )),
+                      //   child: const SizedBox(
+                      //     width: 30 * 1.2,
+                      //     height: 30 * 1.2,
+                      //     child: Center(
+                      //         child: Icon(
+                      //           Iconsax.add,
+                      //           color: Colors.white,
+                      //         )),
+                      //   ),
+                      // )
                     ],
                   )
                 ],

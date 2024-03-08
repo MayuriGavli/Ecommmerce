@@ -28,45 +28,33 @@ import 'Singleton/AppSingleton.dart';
 
 class SearchScreen extends StatefulWidget {
   SearchScreen({super.key});
-
   @override
   State<SearchScreen> createState() => SearchScreenState();
 }
 
 class SearchScreenState extends State<SearchScreen> {
-  var allProductArray = [];
+  var allProductArray = [
+    ProductDetailsModel(
+        ProductName: 'dummy',
+        CompanyName: '',
+        Discount: '',
+        ProductPrice: '',
+        imageURL: '',
+        isLiked: false)
+  ];
 
   @override
   Widget build(BuildContext context) {
     //For GetAllProductData
-    void getAllData() async {
-      var product = await ProductDetailsModel.getAllProductDetail();
-      if (allProductArray.length == 0) {
-        //add data
-        product.forEach((element) {
-          allProductArray.add(element);
-        });
-      } else if (allProductArray.length == product.length) {
-        //dont do anythinhg
-      } else if (allProductArray.length >= product.length) {
-        // extra data
-        allProductArray.removeRange(0, allProductArray.length);
-        getAllData();
-      }
-      print('+++++++++++++++++');
+    void getAllData({String searchProductName = 'Sadi'}) async {
+      var product = await ProductDetailsModel.getAllProductDetail(
+          searchProductName: searchProductName);
+      allProductArray = product;
+      print('========================');
       print(product.length);
-      print(allProductArray.length);
-      DateTime today = new DateTime.now();
-      // DateTime date = new DateTime(now.year, now.month, now.day);
-      print("${today.day}-${today.month}-${today.year}");
-
-      var futureDate = today.day + 1;
-      print(futureDate);
-      print("${futureDate}-${today.month}-${today.year}");
-      print('+++++++++++++++++');
+      print(allProductArray[0].ProductName);
+      print('========================');
     }
-
-    getAllData();
 
     return Scaffold(
       appBar: AppBar(
@@ -85,9 +73,12 @@ class SearchScreenState extends State<SearchScreen> {
               children: [
                 DropdownButtonFormField(
                     decoration: InputDecoration(prefixIcon: Icon(Iconsax.sort)),
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      print(value);
+                      getAllData(searchProductName: value ?? '');
+                    },
                     items: [
-                      'T-Shirt',
+                      'Top',
                       'White Lehnaga',
                       'White Shirt',
                       'Sadi',
@@ -102,7 +93,7 @@ class SearchScreenState extends State<SearchScreen> {
                 ),
                 GridView.builder(
                   itemCount:
-                      allProductArray.length > 1 ? allProductArray.length : 1,
+                      allProductArray.length > 0 ? allProductArray.length : 0,
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(left: 5, right: 5),
                   physics: const NeverScrollableScrollPhysics(),
@@ -128,7 +119,15 @@ class TProductCardVertical extends StatelessWidget {
   final int index;
   var isfavarate;
   Color _iconColor = Colors.white;
-  var allProductArray = [];
+  var allProductArray = [
+    ProductDetailsModel(
+        ProductName: 'dummy',
+        CompanyName: '',
+        Discount: '',
+        ProductPrice: '',
+        imageURL: '',
+        isLiked: false)
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -189,56 +188,6 @@ class TProductCardVertical extends StatelessWidget {
       },
     ];
 
-    void getAllData() async {
-      var product = await ProductDetailsModel.getAllProductDetail();
-      if (allProductArray.length == 0) {
-        //add data
-        product.forEach((element) {
-          allProductArray.add(element);
-        });
-      } else if (allProductArray.length == product.length) {
-        //dont do anythinhg
-      } else if (/*allProductArray.length >= product.length || */ allProductArray
-              .length ==
-          1) {
-        // extra data
-        allProductArray.removeRange(0, allProductArray.length);
-        getAllData();
-      }
-      print('&&&&&&&&&&&&&&&&&&&&&');
-      print(product.length);
-      print(allProductArray.length);
-      print('&&&&&&&&&&&&&&&&&&&&&');
-    }
-    // getAllData();
-
-    if (this.allProductArray.length > 0) {
-      allProductArray = this.allProductArray;
-    } else {
-      allProductArray = [
-        ProductDetailsModel(
-            ProductName: 'dummy',
-            CompanyName: '',
-            Discount: '',
-            ProductPrice: '',
-            imageURL: '')
-      ];
-    }
-    print('==============================');
-    print(allProductArray);
-    print(allProductArray.length);
-    print('==============================');
-    if (allProductArray.length == 1) {
-      getAllData();
-    }
-
-    // allProductArray.forEach((element) {
-    //   print('==============================');
-    //   print(element.ProductName);
-    //   print('==============================');
-    // });
-
-    // print(AllProductDetail);
     return GestureDetector(
       onTap: () {},
       child: Container(
@@ -301,7 +250,7 @@ class TProductCardVertical extends StatelessWidget {
                           ),
                           child: IconButton(
 
-                              // icon: Icon(Icons.star, color: _iconColor),
+                            // icon: Icon(Icons.star, color: _iconColor),
                               icon: isfavarate == true
                                   ? Icon(
                                       Iconsax.heart5,
