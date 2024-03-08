@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'Providers/SharedPreferencesService.dart';
 
@@ -155,11 +157,8 @@ class ProfileScreenState extends State<ProfileScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     //Check if the form is valid and terms are agreed
-                    Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditProfile()))
-                        .then(refreshData);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => EditProfile()));
                   },
                   child: const Text("Edit Profile"),
                 ),
@@ -213,14 +212,40 @@ class ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       _selectedImage = File(returnedImage!.path);
     });
-    if (_selectedImage != null) {}
+    if (_selectedImage != null) {
+      updateProfileImage();
+    }
+  }
+
+  void updateProfileImage() async {
+    var imageTrimedFromFirst =
+        _selectedImage.toString().substring(7); //Trim Image From first
+    var finalImageAfterTrimFromBack = imageTrimedFromFirst.substring(
+        0, imageTrimedFromFirst.length - 1); //Trim Image from Back
+
+    var editedUserData = UserModel(
+        id: appSingletonInstance.userDataFromSingleton.id,
+        userName: appSingletonInstance.userDataFromSingleton.userName,
+        userEmail: appSingletonInstance.userDataFromSingleton.userEmail,
+        userPassword: appSingletonInstance.userDataFromSingleton.userPassword,
+        userPhoneNo: appSingletonInstance.userDataFromSingleton.userPhoneNo,
+        imageURL: finalImageAfterTrimFromBack);
+
+    await UserModel.updateUserRecord(editedUserData);
+    appSingletonInstance.userDataFromSingleton.imageURL =
+        finalImageAfterTrimFromBack;
+    SharedPreferences sharedPreferenceInstance =
+        await SharedPreferences.getInstance(); //Shared preference object
+    String userDataEncodeInJson = jsonEncode(editedUserData); // encoding data
+    sharedPreferenceInstance.setString('userData', userDataEncodeInJson);
+    appSingletonInstance.showToast('Profile Image Updated Successfull');
   }
 
   Stream<List<UserModel>> getAllUserData() => FirebaseFirestore.instance
       .collection('User')
       .snapshots()
       .map((snapshots) =>
-      snapshots.docs.map((doc) => UserModel.fromJson(doc.data())).toList());
+          snapshots.docs.map((doc) => UserModel.fromJson(doc.data())).toList());
 
   Widget bottomSheet() {
     return Container(
@@ -255,12 +280,6 @@ class ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  FutureOr refreshData(dynamic value) {
-    print('------------Hiiiiiiiiiii----------------');
-    print(appSingletonInstance.userDataFromSingleton.userEmail);
-    setUserDataInProfileScreen();
-  }
-
   void setUserDataInProfileScreen() {
     _user_name = appSingletonInstance.userDataFromSingleton.userName ?? '';
     _user_email = appSingletonInstance.userDataFromSingleton.userEmail ?? '';
@@ -269,6 +288,8 @@ class ProfileScreenState extends State<ProfileScreen> {
     _user_phoneNo =
         appSingletonInstance.userDataFromSingleton.userPhoneNo ?? '';
     _user_id = appSingletonInstance.userDataFromSingleton.id ?? '';
+    var image = appSingletonInstance.userDataFromSingleton.imageURL;
+    _selectedImage = File(image);
   }
 }
 

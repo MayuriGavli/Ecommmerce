@@ -5,27 +5,6 @@ import 'DetailProductScreen.dart';
 import 'Models/ProductDetailsModel.dart';
 import 'Singleton/AppSingleton.dart';
 
-//
-// class AppBar extends StatelessWidget implements PreferredSizeWidget{
-//   const AppBar({super.key,this.title,this.showbackArrow=false,this.leadingIcon,this.actions,this.leadingOnPressed,});
-//
-//   final Widget? title;
-//   final bool showbackArrow;
-//   final IconData? leadingIcon;
-//   final List<Widget>? actions;
-//   final VoidCallback? leadingOnPressed;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(padding: EdgeInsets.symmetric(horizontal: 16.0),
-//       child: AppBar(
-//         auto
-//         leading : showbackArrow? IconButton(onPressed: () => Get.back(), icon: Icon(Iconsax.arrow_left): leadin)
-//       ),
-//     );
-//   }
-// }
-
 class SearchScreen extends StatefulWidget {
   SearchScreen({super.key});
   @override
@@ -33,6 +12,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class SearchScreenState extends State<SearchScreen> {
+  bool dataFetched = false;
   var allProductArray = [
     ProductDetailsModel(
         ProductName: 'dummy',
@@ -44,18 +24,37 @@ class SearchScreenState extends State<SearchScreen> {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    //For GetAllProductData
-    void getAllData({String searchProductName = 'Sadi'}) async {
+  void initState() {
+    super.initState();
+    allProductArray = [];
+  }
+
+  //For GetAllProductData
+  void getAllData({String searchProductName = ''}) async {
+    if (!dataFetched) {
       var product = await ProductDetailsModel.getAllProductDetail(
           searchProductName: searchProductName);
-      allProductArray = product;
+      if (product.isNotEmpty &&
+          product.length == 1 &&
+          product[0].ProductName == 'dummy') {
+        product = [];
+        appSingletonInstance.showToast('Product not found');
+      }
+      setState(() {
+        allProductArray = product;
+        dataFetched = true;
+      });
+
       print('========================');
       print(product.length);
       print(allProductArray[0].ProductName);
       print('========================');
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    dataFetched = false;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.1,
@@ -82,7 +81,6 @@ class SearchScreenState extends State<SearchScreen> {
                       'White Lehnaga',
                       'White Shirt',
                       'Sadi',
-                      'Sari',
                       'JumpSuit',
                       'Anarkali'
                     ]
@@ -93,7 +91,7 @@ class SearchScreenState extends State<SearchScreen> {
                 ),
                 GridView.builder(
                   itemCount:
-                      allProductArray.length > 0 ? allProductArray.length : 0,
+                  allProductArray.length > 0 ? allProductArray.length : 0,
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(left: 5, right: 5),
                   physics: const NeverScrollableScrollPhysics(),

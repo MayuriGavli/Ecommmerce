@@ -87,8 +87,6 @@ class ProductDetailsModel {
           isLiked: false)
     ];
 
-    await Future.delayed(Duration(seconds: 2));
-
     if (searchProductName != '') {
       //For Search List
       final productTableObject = await FirebaseFirestore.instance
@@ -121,6 +119,23 @@ class ProductDetailsModel {
             imageURL: '',
             isLiked: false)
       ];
+    }
+  }
+
+  static Future<List<ProductDetailsModel>> getAllFavoriteProduct() async {
+    final productTableObject = await FirebaseFirestore.instance
+        .collection('Product')
+        .where('isLiked', isEqualTo: true)
+        .get();
+    final productData = productTableObject.docs
+        .map((QueryDocumentSnapshot<Map<String, dynamic>> e) =>
+            ProductDetailsModel.fromQueryDocumentSnapShot(e))
+        .toList();
+
+    if (productData.isNotEmpty) {
+      return productData;
+    } else {
+      return [];
     }
   }
 

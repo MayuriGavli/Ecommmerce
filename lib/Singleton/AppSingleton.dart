@@ -7,8 +7,12 @@ import '../Models/ProductDetailsModel.dart';
 class appSingleton {
   static final _appSingleton = new appSingleton._internal();
 
-  UserModel userDataFromSingleton =
-      UserModel(userName: '', userEmail: '', userPassword: '', userPhoneNo: '');
+  UserModel userDataFromSingleton = UserModel(
+      userName: '',
+      userEmail: '',
+      userPassword: '',
+      userPhoneNo: '',
+      imageURL: '');
 
   ProductDetailsModel productDetailToEdit = ProductDetailsModel(
       id: '',

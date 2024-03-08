@@ -224,14 +224,6 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
 
   List<ProductDetailsModel> allProductArray;
   final int index;
-  bool isLiked = true;
-  var productToEdit = ProductDetailsModel(
-      ProductName: 'dummy1',
-      CompanyName: '',
-      Discount: '',
-      ProductPrice: '',
-      imageURL: '',
-      isLiked: false);
 
   @override
   Widget build(BuildContext context) {

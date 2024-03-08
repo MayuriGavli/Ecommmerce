@@ -7,6 +7,7 @@ class UserModel {
   final String userEmail;
   final String userPassword;
   final String userPhoneNo;
+  String imageURL;
 
   UserModel({
     this.id = '',
@@ -14,14 +15,17 @@ class UserModel {
     required this.userEmail,
     required this.userPassword,
     required this.userPhoneNo,
+    this.imageURL = '',
   });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         'id': id,
         'userName': userName,
         'userEmail': userEmail,
         'userPassword': userPassword,
         'userPhoneNo': userPhoneNo,
+        'imageURL': imageURL,
       };
 
   static UserModel fromJson(Map<String, dynamic> jsonData) => UserModel(
@@ -29,7 +33,8 @@ class UserModel {
       userName: jsonData['userName'],
       userEmail: jsonData['userEmail'],
       userPassword: jsonData['userPassword'],
-      userPhoneNo: jsonData['userPhoneNo']);
+      userPhoneNo: jsonData['userPhoneNo'],
+      imageURL: jsonData['imageURL']);
 
   static UserModel fromJsonforDynameic(Map<dynamic, dynamic> jsonData) =>
       UserModel(
@@ -37,7 +42,8 @@ class UserModel {
           userName: jsonData['userName'],
           userEmail: jsonData['userEmail'],
           userPassword: jsonData['userPassword'],
-          userPhoneNo: jsonData['userPhoneNo']);
+          userPhoneNo: jsonData['userPhoneNo'],
+          imageURL: jsonData['imageURL']);
 
   factory UserModel.fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> jsonData) {
@@ -47,7 +53,8 @@ class UserModel {
         userName: data['userName'],
         userEmail: data['userEmail'],
         userPassword: data['userPassword'],
-        userPhoneNo: data['userPhoneNo']);
+        userPhoneNo: data['userPhoneNo'],
+        imageURL: data['imageURL']);
   }
 
   factory UserModel.fromQueryDocumentSnapShot(
@@ -58,12 +65,12 @@ class UserModel {
         userName: data['userName'],
         userEmail: data['userEmail'],
         userPassword: data['userPassword'],
-        userPhoneNo: data['userPhoneNo']);
+        userPhoneNo: data['userPhoneNo'],
+        imageURL: data['imageURL']);
   }
 
   //Get Single User Data from its email.
   static Future<UserModel> getSingledata(String email) async {
-    var isDataPresent = false;
     final userTableObject = await FirebaseFirestore.instance
         .collection('User')
         .where("userEmail", isEqualTo: email)

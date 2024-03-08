@@ -2,6 +2,8 @@ import 'package:e_commmerce1/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
+import 'Models/ProductDetailsModel.dart';
+
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
 
@@ -10,8 +12,35 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class FavoriteScreenState extends State<FavoriteScreen> {
+  bool dataFetched = false;
+  var allProductArray = [
+    ProductDetailsModel(
+        ProductName: 'dummy1',
+        CompanyName: '',
+        Discount: '',
+        ProductPrice: '',
+        imageURL: '',
+        isLiked: false)
+  ];
+
+  void getAllFavoriteData() async {
+    if (!dataFetched) {
+      var product = await ProductDetailsModel.getAllFavoriteProduct();
+
+      setState(() {
+        allProductArray = product;
+        dataFetched = true;
+      });
+
+      print('+++++++++++++++++');
+      print(allProductArray.length);
+      print('+++++++++++++++++');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    getAllFavoriteData();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -34,7 +63,8 @@ class FavoriteScreenState extends State<FavoriteScreen> {
                 children: [
                   const SizedBox(height: 16.0),
                   GridView.builder(
-                    itemCount: 8,
+                    itemCount:
+                        allProductArray.length > 1 ? allProductArray.length : 0,
                     shrinkWrap: true,
                     padding: const EdgeInsets.only(left: 5, right: 5),
                     physics: const NeverScrollableScrollPhysics(),
@@ -45,7 +75,8 @@ class FavoriteScreenState extends State<FavoriteScreen> {
                       crossAxisSpacing: 10.0,
                       mainAxisExtent: 253,
                     ),
-                    itemBuilder: (_, index) => TProductCardVertical(index),
+                    itemBuilder: (_, index) =>
+                        TProductCardVertical(index, allProductArray),
                   )
                 ],
               )),
@@ -56,9 +87,10 @@ class FavoriteScreenState extends State<FavoriteScreen> {
 }
 
 class TProductCardVertical extends StatelessWidget {
-  const TProductCardVertical(this.index, {super.key});
+  TProductCardVertical(this.index, this.allProductArray, {super.key});
 
   final int index;
+  List<ProductDetailsModel> allProductArray;
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +190,8 @@ class TProductCardVertical extends StatelessWidget {
               child: Stack(
                 children: [
                   Troundedimage(
-                    imageUrl: items[index]['image'].toString(),
+                    // imageUrl: items[index]['image'].toString(),
+                    imageUrl: allProductArray[index].imageURL,
                     applyImageRadius: true,
                     padding: EdgeInsets.only(top: 10, left: 20),
                   ),
@@ -172,7 +205,8 @@ class TProductCardVertical extends StatelessWidget {
                       backgroundColor: Colors.amber,
                       // padding: EdgeInsets.symmetric(horizontal: 8.0,vertical: 8.0),
                       padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
-                      child: Text(items[index]['discount'].toString()),
+                      // child: Text(items[index]['discount'].toString()),
+                      child: Text(allProductArray[index].Discount),
                     ),
                   ),
 
@@ -187,10 +221,10 @@ class TProductCardVertical extends StatelessWidget {
                           ),
                           child: IconButton(
                             onPressed: () {},
-                            icon: items[index]['isFavorite'] == true
+                            icon: allProductArray[index].isLiked
                                 ? const Icon(Iconsax.heart5)
                                 : const Icon(Iconsax.heart5),
-                            color: items[index]['isFavorite'] == true
+                            color: allProductArray[index].isLiked
                                 ? Colors.redAccent
                                 : Colors.white,
                           ))),
@@ -204,7 +238,8 @@ class TProductCardVertical extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    items[index]['name'].toString(),
+                    // items[index]['name'].toString(),
+                    allProductArray[index].ProductName,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                     textAlign: TextAlign.start,
@@ -219,7 +254,8 @@ class TProductCardVertical extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        items[index]['company_name'].toString(),
+                        // items[index]['company_name'].toString(),
+                        allProductArray[index].CompanyName,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontFamily: 'RobotoMono',
@@ -241,7 +277,8 @@ class TProductCardVertical extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        items[index]['price'].toString(),
+                        // items[index]['price'].toString(),
+                        allProductArray[index].ProductPrice,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
