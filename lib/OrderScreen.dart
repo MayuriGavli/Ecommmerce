@@ -84,7 +84,7 @@ class OrderItems extends StatelessWidget {
         'Product_Name': 'Crop Top',
         'Shippment': 'Processing',
         'Shippment_value': '01 Feb 2024',
-        'Shipping Date': '07 Feb 2024',
+        'Shipping Date': '11 Feb 2024',
       },
       {
         'orderID': '#4322',
@@ -105,61 +105,64 @@ class OrderItems extends StatelessWidget {
         'Product_Name': 'Dungree',
         'Shippment': '',
         'Shippment_value': '28 Jan 2024',
-        'Shipping Date': '07 Feb 2024',
+        'Shipping Date': '11 Feb 2024',
       },
       {
         'orderID': '#5699',
         'Product_Name': 'Dungree',
         'Shippment': '',
         'Shippment_value': '28 Jan 2024',
-        'Shipping Date': '07 Feb 2024',
+        'Shipping Date': '11 Feb 2024',
       },
       {
         'orderID': '#5699',
         'Product_Name': 'Dungree',
         'Shippment': '',
         'Shippment_value': '28 Jan 2024',
-        'Shipping Date': '07 Feb 2024',
+        'Shipping Date': '11 Feb 2024',
       },
       {
         'orderID': '#5699',
         'Product_Name': 'Dungree',
         'Shippment': '',
         'Shippment_value': '28 Jan 2024',
-        'Shipping Date': '07 Feb 2024',
+        'Shipping Date': '11 Feb 2024',
       },
       {
         'orderID': '#5699',
         'Product_Name': 'Dungree',
         'Shippment': '',
         'Shippment_value': '28 Jan 2024',
-        'Shipping Date': '07 Feb 2024',
+        'Shipping Date': '11 Feb 2024',
       },
       {
         'orderID': '#5699',
         'Product_Name': 'Dungree',
         'Shippment': '',
         'Shippment_value': '28 Jan 2024',
-        'Shipping Date': '07 Feb 2024',
+        'Shipping Date': '11 Feb 2024',
       },
       {
         'orderID': '#5699',
         'Product_Name': 'Dungree',
         'Shippment': '',
         'Shippment_value': '28 Jan 2024',
-        'Shipping Date': '07 Feb 2024',
+        'Shipping Date': '11 Feb 2024',
       }
     ];
 
     String currentDate =
         '${todayDate.day}-${todayDate.month}-${todayDate.year}';
     void getDifferenceinDate(String ShipmentDate, int index) {
-      var newCurrentDate = currentDate.substring(0, currentDate.length - 7);
-      var newShipmentDate = ShipmentDate.substring(0, currentDate.length - 7);
+      print("ShipmentDate:-$ShipmentDate");
+      print("currentDate:-$currentDate");
+      print(ShipmentDate.length);
+      print(currentDate.length);
+      var newCurrentDate = currentDate.substring(0, currentDate.length - 8);
+      var newShipmentDate = ShipmentDate.substring(0, currentDate.length - 8);
+      print("newShipmentDate:= $newShipmentDate");
       var newCurrentDate1 = int.parse(newCurrentDate);
       var newShipmentDate1 = int.parse(newShipmentDate);
-      print(newCurrentDate1);
-      print(newShipmentDate1);
       if (newShipmentDate1 > newCurrentDate1) {
         // Product is still in processing
         items[index]['Shippment'] = 'Processing';
