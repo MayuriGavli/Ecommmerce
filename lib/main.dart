@@ -18,11 +18,11 @@ void main() async {
 
   Widget Screen; //Varibale for navigation
   SharedPreferences pref =
-      await SharedPreferences.getInstance(); //SharedPrefrence Object
+      await SharedPreferences.getInstance(); //SharedPreference Object
   var data =
-      pref.getString('userData'); //getting the data from shared prefrence
+      pref.getString('userData'); //getting the data from shared preference
 
-  if (data == '') {
+  if (data == null || data == '') {
     // if empty then navigate to login screen
     print("String Empty");
     Screen = LoginScreen();
